@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/sorting">
+        <menu >
+            <group android:checkableBehavior="single">
+                <item android:id="@+id/sorted_personally"
+                    android:title="@string/personally" />
+                <item android:id="@+id/sorted_date"
+                    android:title="@string/by_date_of_change" />
+                <item android:id="@+id/sorted_title"
+                    android:title="@string/by_title" />
+            </group>
+        </menu>
+    </item>
+
+
+    <item android:title="@string/displaying_elements">
+        <menu >
+            <group android:checkableBehavior="single">
+                <item android:id="@+id/display_plate"
+                    android:title="@string/plate" />
+                <item android:id="@+id/display_row"
+                    android:title="@string/row" />
+            </group>
+        </menu>
+    </item>
+
+</menu>

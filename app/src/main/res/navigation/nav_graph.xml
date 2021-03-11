@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.kabasonic.notepad.ui.HomeFragment"
+        android:label="@string/notes"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_noteFragment"
+            app:destination="@id/noteFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.kabasonic.notepad.ui.FavoriteFragment"
+        android:label="@string/favorite"
+        tools:layout="@layout/fragment_favorite">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/remindersFragment"
+        android:name="com.kabasonic.notepad.ui.RemindersFragment"
+        android:label="@string/reminders"
+        tools:layout="@layout/fragment_reminders">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/trashFragment"
+        android:name="com.kabasonic.notepad.ui.TrashFragment"
+        android:label="@string/trash"
+        tools:layout="@layout/fragment_trash">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.kabasonic.notepad.ui.HelpFragment"
+        android:label="@string/support"
+        tools:layout="@layout/fragment_help">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/noteFragment"
+        android:name="com.kabasonic.notepad.ui.NoteFragment"
+        android:label="@string/create_note">
+        <argument
+            android:name="TypeNote"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

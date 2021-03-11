@@ -1,4 +1,4 @@
-package com.kabasonic.notepad.ui;
+package com.kabasonic.notepad.ui.onboarding;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

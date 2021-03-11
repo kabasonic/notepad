@@ -1,4 +1,4 @@
-package com.kabasonic.notepad.ui;
+package com.kabasonic.notepad.ui.onboarding;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

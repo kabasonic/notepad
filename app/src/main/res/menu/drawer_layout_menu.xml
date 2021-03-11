@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/homeFragment"
+            android:icon="@drawable/ic_round_event_note_24"
+            android:title="@string/notes" />
+
+        <item
+            android:id="@+id/favoriteFragment"
+            android:icon="@drawable/ic_round_favorite_24"
+            android:title="@string/favorite" />
+
+        <item
+            android:id="@+id/remindersFragment"
+            android:icon="@drawable/ic_round_notifications_24"
+            android:title="@string/reminders" />
+
+        <item
+            android:id="@+id/trashFragment"
+            android:icon="@drawable/ic_round_delete_24"
+            android:title="@string/trash" />
+    </group>
+
+    <item android:title="@string/more">
+        <menu>
+            <group android:checkableBehavior="none">
+                <item
+
+                    android:icon="@drawable/ic_round_settings_24"
+                    android:title="@string/settings" />
+
+                <item
+                    android:id="@+id/helpFragment"
+                    android:icon="@drawable/ic_round_help_24"
+                    android:title="@string/support" />
+
+
+            </group>
+        </menu>
+
+    </item>
+
+
+</menu>
