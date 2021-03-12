@@ -1,27 +1,21 @@
 package com.kabasonic.notepad.ui;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.PopupMenu;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.kabasonic.notepad.R;
+import com.kabasonic.notepad.ui.reminder.ReminderDialogFragment;
 
 public class NoteFragment extends Fragment {
     @Nullable
@@ -51,58 +45,62 @@ public class NoteFragment extends Fragment {
 
     private void createRememberingWindow() {
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_remembering_note, null);
-        dialogBuilder.setView(dialogView);
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        ReminderDialogFragment reminderDialogFragment = ReminderDialogFragment.newInstance();
+        reminderDialogFragment.show(fm,"reminderDialogFragment");
 
-        TextView dateReminder = (TextView) dialogView.findViewById(R.id.day_reminder);
-        TextView timeReminder = (TextView) dialogView.findViewById(R.id.time_reminder);
-        Spinner spinnerReminder = (Spinner) dialogView.findViewById(R.id.spinner_reminder);
-        SwitchMaterial switchReminder = (SwitchMaterial) dialogView.findViewById(R.id.set_switch_reminder);
-
-        dateReminder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("Window Reminder", "Set date:" );
-            }
-        });
-
-        timeReminder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("Window Reminder", "Set time:" );
-            }
-        });
-        /*
-            ERROR Don't call setOnClickListener for an AdapterView. You probably want setOnItemClickListener instead
-            ERROR setOnItemClickListener cannot be used with a spinner.
-            :(
-         */
-//        spinnerReminder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+//        LayoutInflater inflater = this.getLayoutInflater();
+//        View dialogView = inflater.inflate(R.layout.dialog_remembering_note, null);
+//        dialogBuilder.setView(dialogView);
+//
+//        TextView dateReminder = (TextView) dialogView.findViewById(R.id.day_reminder);
+//        TextView timeReminder = (TextView) dialogView.findViewById(R.id.time_reminder);
+//        Spinner spinnerReminder = (Spinner) dialogView.findViewById(R.id.spinner_reminder);
+//        SwitchMaterial switchReminder = (SwitchMaterial) dialogView.findViewById(R.id.set_switch_reminder);
+//
+//        dateReminder.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Log.i("Window Reminder", "Do not repeat:" );
+//            public void onClick(View v) {
+//                Log.i("Window Reminder", "Set date:" );
 //            }
 //        });
-
-        dialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {}
-        });
-        dialogBuilder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Write date Window
-                Log.i("Window Reminder", "Set date:" );
-                Log.i("Window Reminder", "Set time:" );
-                Log.i("Window Reminder", "Do not repeat:" );
-                Log.i("Window Reminder", "Show text: " + String.valueOf(switchReminder.isChecked()));
-            }
-        });
-
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
+//
+//        timeReminder.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i("Window Reminder", "Set time:" );
+//            }
+//        });
+//        /*
+//            ERROR Don't call setOnClickListener for an AdapterView. You probably want setOnItemClickListener instead
+//            ERROR setOnItemClickListener cannot be used with a spinner.
+//            :(
+//         */
+////        spinnerReminder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+////            @Override
+////            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+////                Log.i("Window Reminder", "Do not repeat:" );
+////            }
+////        });
+//
+//        dialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {}
+//        });
+//        dialogBuilder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                //Write date Window
+//                Log.i("Window Reminder", "Set date:" );
+//                Log.i("Window Reminder", "Set time:" );
+//                Log.i("Window Reminder", "Do not repeat:" );
+//                Log.i("Window Reminder", "Show text: " + String.valueOf(switchReminder.isChecked()));
+//            }
+//        });
+//
+//        AlertDialog alertDialog = dialogBuilder.create();
+//        alertDialog.show();
     }
 
     @Override

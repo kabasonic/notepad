@@ -33,4 +33,8 @@
     <string name="do_not_repeat">Do not repeat:</string>
     <string name="show_text">Show text:</string>
     <string name="set_time">Set time:</string>
+    <array name="data_spinner">
+        <item>Show</item>
+        <item>Dont show</item>
+    </array>
 </resources>

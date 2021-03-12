@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+<LinearLayout
+
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_round_notifications_24"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_a_remember"
         android:textColor="@color/black"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_marginBottom="8dp"/>
 
     <LinearLayout
@@ -46,7 +52,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="16dp"
+            android:onClick="onClick"/>
 
     </LinearLayout>
 
@@ -77,6 +84,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:onClick="onClick"
             />
 
     </LinearLayout>
@@ -98,11 +106,13 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp" />
 
+
+
         <Spinner
             android:id="@+id/spinner_reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp" >
+            android:layout_margin="8dp">
         </Spinner>
 
 
@@ -131,25 +141,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
+            android:onClick="onClick"
             android:layout_margin="8dp"/>
     </LinearLayout>
 
 
 
-    <!--  <LinearLayout
+      <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center"
           android:orientation="horizontal">
           <com.google.android.material.button.MaterialButton
+              android:id="@+id/bt_cancel_reminder"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="Cancel"
-              android:layout_margin="8dp"/>
+              android:onClick="onClick"
+              android:layout_margin="16dp"/>
           <com.google.android.material.button.MaterialButton
+              android:id="@+id/bt_okay_reminder"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="Okay"
-              android:layout_margin="8dp"/>
-      </LinearLayout>-->
+              android:onClick="onClick"
+              android:layout_margin="16dp"/>
+      </LinearLayout>
 </LinearLayout>
+    </androidx.cardview.widget.CardView>
