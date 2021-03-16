@@ -1,27 +1,44 @@
 package com.kabasonic.notepad.ui;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kabasonic.notepad.R;
+import com.kabasonic.notepad.ui.dialogs.ColorPickerDialogFragment;
 import com.kabasonic.notepad.ui.reminder.ReminderDialogFragment;
 
-public class NoteFragment extends Fragment {
+public class NoteFragment extends Fragment implements ColorPickerDialogFragment.ColorPickerListener{
+    View view;
+    BottomNavigationView bottomNavigationView;
+    LinearLayout linearLayout;
+    FragmentManager fm;
+    private int i;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_note, container, false);
+        view = inflater.inflate(R.layout.fragment_note, container, false);
+        bottomNavigationView = view.findViewById(R.id.bottom_navigation_create_note);
+        linearLayout = (LinearLayout) view.findViewById(R.id.layout_create_note);
+        fm = getActivity().getSupportFragmentManager();
+
         setHasOptionsMenu(true);
         actionArgument();
         return view;
@@ -31,76 +48,18 @@ public class NoteFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        navBottomListener();
     }
 
     private void actionArgument() {
         String key = getResources().getString(R.string.note_key_remembering);
         NoteFragmentArgs noteFragmentArgs = NoteFragmentArgs.fromBundle(getArguments());
-        if(noteFragmentArgs.getTypeNote()== key){
-            createRememberingWindow();
+        if (noteFragmentArgs.getTypeNote().equals(key)){
+            //Create remembering window
+            ReminderDialogFragment reminderDialogFragment = ReminderDialogFragment.newInstance();
+            reminderDialogFragment.show(fm, "reminderDialogFragment");
         }
 
-    }
-
-    private void createRememberingWindow() {
-
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        ReminderDialogFragment reminderDialogFragment = ReminderDialogFragment.newInstance();
-        reminderDialogFragment.show(fm,"reminderDialogFragment");
-
-//        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-//        LayoutInflater inflater = this.getLayoutInflater();
-//        View dialogView = inflater.inflate(R.layout.dialog_remembering_note, null);
-//        dialogBuilder.setView(dialogView);
-//
-//        TextView dateReminder = (TextView) dialogView.findViewById(R.id.day_reminder);
-//        TextView timeReminder = (TextView) dialogView.findViewById(R.id.time_reminder);
-//        Spinner spinnerReminder = (Spinner) dialogView.findViewById(R.id.spinner_reminder);
-//        SwitchMaterial switchReminder = (SwitchMaterial) dialogView.findViewById(R.id.set_switch_reminder);
-//
-//        dateReminder.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i("Window Reminder", "Set date:" );
-//            }
-//        });
-//
-//        timeReminder.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i("Window Reminder", "Set time:" );
-//            }
-//        });
-//        /*
-//            ERROR Don't call setOnClickListener for an AdapterView. You probably want setOnItemClickListener instead
-//            ERROR setOnItemClickListener cannot be used with a spinner.
-//            :(
-//         */
-////        spinnerReminder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-////            @Override
-////            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-////                Log.i("Window Reminder", "Do not repeat:" );
-////            }
-////        });
-//
-//        dialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {}
-//        });
-//        dialogBuilder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                //Write date Window
-//                Log.i("Window Reminder", "Set date:" );
-//                Log.i("Window Reminder", "Set time:" );
-//                Log.i("Window Reminder", "Do not repeat:" );
-//                Log.i("Window Reminder", "Show text: " + String.valueOf(switchReminder.isChecked()));
-//            }
-//        });
-//
-//        AlertDialog alertDialog = dialogBuilder.create();
-//        alertDialog.show();
     }
 
     @Override
@@ -110,11 +69,14 @@ public class NoteFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.change_color_bg:
+                linearLayout.setBackgroundColor(Color.BLACK);
                 break;
             case R.id.share_note:
                 break;
@@ -125,4 +87,43 @@ public class NoteFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void navBottomListener() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_menu_1:
+                        Log.d("Navigation", "Menu 1");
+                        //openColorDialog();
+                        DialogFragment dialogColorPicker = new ColorPickerDialogFragment(NoteFragment.this);
+                        dialogColorPicker.show(fm,"color_picker");
+                        break;
+                    case R.id.nav_menu_2:
+                        Log.d("Navigation", "Menu 2");
+                        break;
+                    case R.id.nav_menu_3:
+                        Log.d("Navigation", "Menu 3");
+                        break;
+                    case R.id.nav_menu_4:
+                        Log.d("Navigation", "Menu 4");
+                        break;
+                    case R.id.nav_menu_5:
+                        Log.d("Navigation", "Menu 5");
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+
+    @Override
+    public void selectedColor(int color) {
+        linearLayout.setBackgroundColor(color);
+    }
+
+
 }
+

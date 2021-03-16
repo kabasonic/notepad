@@ -2,11 +2,7 @@ package com.kabasonic.notepad.ui.reminder;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
@@ -17,7 +13,11 @@ import java.util.Calendar;
 
 public class DatePickerDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
 
-    DataTimeDate dataTimeDate;
+    DataTimeDate mListener;
+
+    public DatePickerDialogFragment (ReminderDialogFragment reminderDialogFragment){
+        this.mListener = (DataTimeDate) reminderDialogFragment;
+    }
 
     @NonNull
     @Override
@@ -33,9 +33,6 @@ public class DatePickerDialogFragment extends DialogFragment implements DatePick
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//        Log.i("onDateSet","Day is: " + String.valueOf(dayOfMonth));
-//        Log.i("onDateSet","Month is: " + String.valueOf(month));
-//        Log.i("onDateSet","Year is: " + String.valueOf(year));
-        dataTimeDate.date(year,month,dayOfMonth);
+        mListener.date(year,month,dayOfMonth);
     }
 }

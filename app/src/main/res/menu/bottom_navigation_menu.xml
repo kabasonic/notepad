@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_menu_1"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_palette_24"
+        android:title="@string/palette" />
+    <item
+        android:id="@+id/nav_menu_2"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_notifications_24"
+        android:title="@string/notification" />
+    <item
+        android:id="@+id/nav_menu_3"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_attach_file_24"
+        android:title="@string/attach_file" />
+    <item
+        android:id="@+id/nav_menu_4"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_checklist_24"
+        android:title="@string/checklist" />
+    <item
+        android:id="@+id/nav_menu_5"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_favorite_24"
+        android:title="@string/add_to_favorite" />
+</menu>

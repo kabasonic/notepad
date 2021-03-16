@@ -1,8 +1,6 @@
 package com.kabasonic.notepad.ui.reminder;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,18 +21,24 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.kabasonic.notepad.R;
 
-public class ReminderDialogFragment extends DialogFragment implements View.OnClickListener, DataTimeDate{
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
+public class ReminderDialogFragment extends DialogFragment implements View.OnClickListener, DataTimeDate {
 
 
     Context context;
 
     boolean stateSwitch = false;
+    private int spinnerPosition = -1;
+    private String[] dataSpinner;
 
     TextView dateReminder, timeReminder;
     Spinner spinnerReminder;
     SwitchMaterial switchReminder;
     MaterialButton btOkayReminder, btCancelReminder;
+
     private FragmentManager fm;
 
     public ReminderDialogFragment() {
@@ -65,8 +66,7 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //String[] dataSpinner = context.getResources().getStringArray(R.array.data_spinner);
-        String[] dataSpinner = {"Show", "Don't show"};
+        dataSpinner = context.getResources().getStringArray(R.array.data_spinner);
 
         // Get field from view
         fm = getActivity().getSupportFragmentManager();
@@ -78,26 +78,31 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
         btOkayReminder = (MaterialButton) view.findViewById(R.id.bt_okay_reminder);
         btCancelReminder = (MaterialButton) view.findViewById(R.id.bt_cancel_reminder);
 
+        //Set current time
+        String currentTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        timeReminder.setText(currentTime);
+
         dateReminder.setOnClickListener(this);
         timeReminder.setOnClickListener(this);
         switchReminder.setOnClickListener(this);
         btOkayReminder.setOnClickListener(this);
         btCancelReminder.setOnClickListener(this);
 
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),R.layout.dialog_remembering_note,R.id.spinner_reminder,dataSpinner);
-//        adapter.setDropDownViewResource(R.layout.dialog_remembering_note);
-//        spinnerReminder.setAdapter(adapter);
-//        spinnerReminder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.i("Spinner","Click on element in spinner");
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                Log.i("Spinner", "Spinner nothing selected");
-//            }
-//        });
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, dataSpinner);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerReminder.setAdapter(adapter);
+        spinnerReminder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                spinnerPosition = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {}
+        });
+
+
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -106,12 +111,12 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
         switch (v.getId()) {
             case R.id.day_reminder:
                 Log.i("onClick", "is Day");
-                DialogFragment datePicker = new DatePickerDialogFragment();
+                DialogFragment datePicker = new DatePickerDialogFragment(this);
                 datePicker.show(fm, "date_picker");
                 break;
             case R.id.time_reminder:
                 Log.i("onClick", "is Time");
-                DialogFragment timePicker = new TimePickerDialogFragment();
+                DialogFragment timePicker = new TimePickerDialogFragment(this);
                 timePicker.show(fm, "time_picker");
                 break;
             case R.id.set_switch_reminder:
@@ -120,6 +125,10 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
                 break;
             case R.id.bt_okay_reminder:
                 Log.i("onClick", "is Okay");
+                Log.i("Date:", String.valueOf(dateReminder.getText()));
+                Log.i("Time:", String.valueOf(timeReminder.getText()));
+                Log.i("Do not repeat:",dataSpinner[spinnerPosition]);
+                Log.i("Show text:", String.valueOf(stateSwitch));
                 getDialog().dismiss();
 
                 break;
@@ -130,19 +139,15 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
         }
     }
 
-
+    @SuppressLint("SetTextI18n")
     @Override
     public void time(int hour, int minute) {
-        Log.i("onTimeSet", "Hour is: " + String.valueOf(hour));
-        Log.i("onTimeSet", "Minute is: " + String.valueOf(minute));
         timeReminder.setText(hour + ":" + minute);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void date(int year, int month, int day) {
-        Log.i("onDateSet","Day is: " + String.valueOf(day));
-        Log.i("onDateSet","Month is: " + String.valueOf(month));
-        Log.i("onDateSet","Year is: " + String.valueOf(year));
         dateReminder.setText(day + "." + month + "." + year);
     }
 }

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <View
+            android:id="@+id/color_1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@drawable/view_circle"
+            android:backgroundTint="@color/colorLightBlue"
+            android:layout_margin="16dp"
+            android:onClick="onClick"
+            android:focusable="true"/>
+
+        <View
+            android:id="@+id/color_2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@drawable/view_circle"
+            android:backgroundTint="@color/colorLightGreen"
+            android:layout_margin="16dp"
+            android:focusable="true"/>
+
+        <View
+            android:id="@+id/color_3"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@drawable/view_circle"
+            android:backgroundTint="@color/colorOrange"
+            android:layout_margin="16dp"
+            android:focusable="true"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <View
+            android:id="@+id/color_4"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@drawable/view_circle"
+            android:backgroundTint="@color/colorRed"
+            android:layout_margin="16dp"
+            android:focusable="true"/>
+
+        <View
+            android:id="@+id/color_5"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@drawable/view_circle"
+            android:backgroundTint="@color/colorYellow"
+            android:layout_margin="16dp"
+            android:focusable="true"/>
+
+        <View
+            android:id="@+id/color_6"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@drawable/view_circle"
+            android:backgroundTint="@color/colorPurple"
+            android:layout_margin="16dp"
+            android:focusable="true"/>
+
+    </LinearLayout>
+
+</LinearLayout>

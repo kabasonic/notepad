@@ -33,8 +33,19 @@
     <string name="do_not_repeat">Do not repeat:</string>
     <string name="show_text">Show text:</string>
     <string name="set_time">Set time:</string>
+    <string name="enter_your_pin">Enter your PIN</string>
+    <string name="notification">Notification</string>
+    <string name="palette">Palette</string>
+    <string name="attach_file">Attach file</string>
+    <string name="checklist">Checklist</string>
+    <string name="add_to_favorite">Add to favorite</string>
+    <string name="okay">Okay</string>
+    <string name="cancel">Cancel</string>
+    <string name="color_picker">Color picker</string>
     <array name="data_spinner">
-        <item>Show</item>
-        <item>Dont show</item>
+        <item>Dont repeat</item>
+        <item>Every day</item>
+        <item>Every month</item>
+        <item>Every year</item>
     </array>
 </resources>
