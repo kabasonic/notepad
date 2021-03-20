@@ -42,6 +42,8 @@
     <string name="okay">Okay</string>
     <string name="cancel">Cancel</string>
     <string name="color_picker">Color picker</string>
+    <string name="add_your_photo_with_camera">Add Your photo with camera</string>
+    <string name="add_your_photo_with_gallery">Add Your photo with gallery</string>
     <array name="data_spinner">
         <item>Dont repeat</item>
         <item>Every day</item>

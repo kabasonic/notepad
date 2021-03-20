@@ -25,6 +25,7 @@ public class ColorPickerDialogFragment extends DialogFragment implements DialogI
 
     public interface ColorPickerListener {
         void selectedColor(int color);
+
     }
 
     ColorPickerListener mListener;
