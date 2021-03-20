@@ -2,6 +2,9 @@ package com.kabasonic.notepad.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,26 +26,40 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kabasonic.notepad.R;
+import com.kabasonic.notepad.ui.adapters.ImageItem;
+import com.kabasonic.notepad.ui.adapters.ImageNoteFragmentAdapter;
 import com.kabasonic.notepad.ui.dialogs.ColorPickerDialogFragment;
 import com.kabasonic.notepad.ui.dialogs.FilePickerDialogFragment;
 import com.kabasonic.notepad.ui.reminder.ReminderDialogFragment;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class NoteFragment extends Fragment implements ColorPickerDialogFragment.ColorPickerListener, FilePickerDialogFragment.FilePickerListener {
 
     public static final int CAMERA_PICK_CODE = 0;
     public static final int STORAGE_PICK_CODE = 1;
-
+    Context mContext;
     View view;
     BottomNavigationView bottomNavigationView;
     LinearLayout linearLayout;
     FragmentManager fm;
     ImageView imageView;
+    RecyclerView mRecyclerView;
+    RecyclerView.LayoutManager mLayoutManager;
+    ImageNoteFragmentAdapter mAdapter;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.mContext = context;
+    }
 
     @Nullable
     @Override
@@ -63,6 +80,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navBottomListener();
+        setImageAdapter(view);
     }
 
     private void actionArgument() {
@@ -134,6 +152,44 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         });
     }
 
+    private void setImageAdapter(View view) {
+        ArrayList<ImageItem> exampleList = new ArrayList<>();
+
+        mRecyclerView = view.findViewById(R.id.note_image_rv);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
+        mAdapter = new ImageNoteFragmentAdapter(mContext, exampleList);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClickListener(new ImageNoteFragmentAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickDeleteImage(int position) {
+                Log.d(getClass().getSimpleName(), "DELETE POSITION: " + position);
+                new AlertDialog.Builder(mContext)
+                        .setTitle("Delete image")
+                        .setMessage("Are you sure you want to delete the selected image?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mAdapter.deleteImageItem(position);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {}
+                        })
+                        .create()
+                        .show();
+            }
+            @Override
+            public void onItemClickPickImage(int position) {
+                // Open image in new window
+            }
+        });
+    }
 
     @Override
     public void selectedColor(int color) {
@@ -159,8 +215,9 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         if (requestCode == CAMERA_PICK_CODE && resultCode == Activity.RESULT_OK) {
             Log.d(getClass().getSimpleName(), "Image with camera");
             if (data != null) {
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                imageView.setImageBitmap(bitmap);
+                Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                mAdapter.addImage(selectedImage);
+                mAdapter.notifyDataSetChanged();
             }
         }
         if (requestCode == STORAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
@@ -170,12 +227,14 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                imageView.setImageBitmap(selectedImage);
+                mAdapter.addImage(selectedImage);
+                mAdapter.notifyDataSetChanged();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
     }
+
 
 }
 
