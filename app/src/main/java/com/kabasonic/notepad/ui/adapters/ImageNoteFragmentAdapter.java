@@ -24,6 +24,7 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
     public interface OnItemClickListener {
         void onItemClickDeleteImage(int position);
         void onItemClickPickImage(int position);
+
     }
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;

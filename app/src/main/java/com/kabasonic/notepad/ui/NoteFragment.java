@@ -83,6 +83,17 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         setImageAdapter(view);
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mAdapter.getItemCount() != 0){
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }else{
+            mRecyclerView.setVisibility(View.GONE);
+        }
+    }
+
     private void actionArgument() {
         String key = getResources().getString(R.string.note_key_remembering);
         NoteFragmentArgs noteFragmentArgs = NoteFragmentArgs.fromBundle(getArguments());
@@ -227,6 +238,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageView.setImageBitmap(selectedImage);
                 mAdapter.addImage(selectedImage);
                 mAdapter.notifyDataSetChanged();
             } catch (FileNotFoundException e) {
