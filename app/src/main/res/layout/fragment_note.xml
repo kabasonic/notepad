@@ -7,17 +7,84 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/note_image_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
 
-    <ImageView
-        android:id="@+id/testImage"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/note_image_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/alarm_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipIcon="@drawable/ic_round_alarm_on_24"
+                app:chipIconVisible="true"
+                style="@style/Widget.MaterialComponents.Chip.Entry"
+                android:layout_marginLeft="32dp"
+                android:layout_marginStart="32dp"
+                android:visibility="gone"/>
+
+            <EditText
+                android:id="@+id/edit_title_text_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lorem_ipsum"
+                android:background="@null"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:maxLength="80"
+                android:hint="Title"/>
+
+            <EditText
+                android:id="@+id/edit_body_text_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lorem_ipsum_body"
+                android:inputType="textMultiLine"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                tools:ignore="TextViewEdits"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="Your text"/>
+
+            <TextView
+                android:id="@+id/last_change"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Last edit: Monday 23:48"
+                android:gravity="right"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:textStyle="italic"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_create_note"
@@ -25,6 +92,5 @@
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_navigation_menu"
         app:labelVisibilityMode="unlabeled"/>
-
 
 </LinearLayout>

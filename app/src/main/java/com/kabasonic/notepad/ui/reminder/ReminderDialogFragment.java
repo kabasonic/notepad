@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.kabasonic.notepad.R;
+import com.kabasonic.notepad.ui.NoteFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,8 +42,18 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
 
     private FragmentManager fm;
 
+    public interface DataReminderListener{
+        void dataListener(String date, String time);
+    }
+
+    DataReminderListener mListener;
+
     public ReminderDialogFragment() {
 
+    }
+
+    public ReminderDialogFragment(NoteFragment noteFragment){
+        this.mListener = (DataReminderListener) noteFragment;
     }
 
     public static ReminderDialogFragment newInstance() {
@@ -129,6 +140,7 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
                 Log.i("Time:", String.valueOf(timeReminder.getText()));
                 Log.i("Do not repeat:",dataSpinner[spinnerPosition]);
                 Log.i("Show text:", String.valueOf(stateSwitch));
+                mListener.dataListener(dateReminder.getText().toString(),timeReminder.getText().toString());
                 getDialog().dismiss();
 
                 break;

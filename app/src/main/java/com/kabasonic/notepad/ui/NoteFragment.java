@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,18 +17,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
 import com.kabasonic.notepad.R;
 import com.kabasonic.notepad.ui.adapters.ImageItem;
 import com.kabasonic.notepad.ui.adapters.ImageNoteFragmentAdapter;
@@ -41,7 +45,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class NoteFragment extends Fragment implements ColorPickerDialogFragment.ColorPickerListener, FilePickerDialogFragment.FilePickerListener {
+public class NoteFragment extends Fragment implements ColorPickerDialogFragment.ColorPickerListener, FilePickerDialogFragment.FilePickerListener, ReminderDialogFragment.DataReminderListener {
 
     public static final int CAMERA_PICK_CODE = 0;
     public static final int STORAGE_PICK_CODE = 1;
@@ -50,10 +54,12 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     BottomNavigationView bottomNavigationView;
     LinearLayout linearLayout;
     FragmentManager fm;
-    ImageView imageView;
+    EditText editBodyText, editTitleText;
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
     ImageNoteFragmentAdapter mAdapter;
+    Chip chipAlarm;
+    TextView lastChange;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -68,8 +74,11 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         bottomNavigationView = view.findViewById(R.id.bottom_navigation_create_note);
         linearLayout = view.findViewById(R.id.layout_create_note);
         fm = getActivity().getSupportFragmentManager();
-        imageView = view.findViewById(R.id.testImage);
 
+        editBodyText = view.findViewById(R.id.edit_body_text_note);
+        editTitleText = view.findViewById(R.id.edit_title_text_note);
+        chipAlarm = view.findViewById(R.id.alarm_chip);
+        lastChange = view.findViewById(R.id.last_change);
 
         setHasOptionsMenu(true);
         actionArgument();
@@ -79,6 +88,30 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        chipAlarm.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(mContext)
+                        .setTitle("Reminder")
+                        .setMessage("Are you sure you want to delete the reminder time?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                chipAlarm.setVisibility(View.GONE);
+                                Snackbar.make(view, "Alarm reminder has been deleted.", Snackbar.LENGTH_LONG).show();
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+        });
+
         navBottomListener();
         setImageAdapter(view);
     }
@@ -87,9 +120,9 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     @Override
     public void onResume() {
         super.onResume();
-        if(mAdapter.getItemCount() != 0){
+        if (mAdapter.getItemCount() != 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             mRecyclerView.setVisibility(View.GONE);
         }
     }
@@ -116,12 +149,14 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.change_color_bg:
-                linearLayout.setBackgroundColor(Color.BLACK);
-                break;
             case R.id.share_note:
                 break;
             case R.id.delete_note:
+                Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_LONG).show();
+
+                NavDirections action = NoteFragmentDirections.actionNoteFragmentToHomeFragment();
+                Navigation.findNavController(view).navigate(action);
+
                 break;
             default:
                 break;
@@ -143,7 +178,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                         break;
                     case R.id.nav_menu_2:
                         Log.d("Navigation", "Menu 2");
-                        DialogFragment dialogReminder = new ReminderDialogFragment();
+                        DialogFragment dialogReminder = new ReminderDialogFragment(NoteFragment.this);
                         dialogReminder.show(fm, "reminder_dialog_fragment");
                         break;
                     case R.id.nav_menu_3:
@@ -156,6 +191,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                         break;
                     case R.id.nav_menu_5:
                         Log.d("Navigation", "Menu 5");
+                        Snackbar.make(view, "Note has been added to favorite.", Snackbar.LENGTH_LONG).show();
                         break;
                 }
                 return true;
@@ -190,11 +226,13 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                         })
                         .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {}
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
                         })
                         .create()
                         .show();
             }
+
             @Override
             public void onItemClickPickImage(int position) {
                 // Open image in new window
@@ -238,7 +276,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                imageView.setImageBitmap(selectedImage);
+//                imageView.setImageBitmap(selectedImage);
                 mAdapter.addImage(selectedImage);
                 mAdapter.notifyDataSetChanged();
             } catch (FileNotFoundException e) {
@@ -248,5 +286,11 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     }
 
 
+    @Override
+    public void dataListener(String date, String time) {
+        String textAlarmChip = date + " " + time;
+        chipAlarm.setText(textAlarmChip);
+        chipAlarm.setVisibility(View.VISIBLE);
+    }
 }
 
