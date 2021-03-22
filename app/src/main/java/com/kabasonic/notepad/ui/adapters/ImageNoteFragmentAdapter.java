@@ -19,6 +19,7 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
 
     private Context mContext;
     private  ArrayList<ImageItem> mImageItems;
+
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -47,7 +48,7 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_image_item_adapter, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view, mListener);
+        //ViewHolder viewHolder = new ViewHolder(view, mListener);
         return new ViewHolder(view, mListener);
     }
 

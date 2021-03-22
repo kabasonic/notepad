@@ -116,7 +116,6 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         setImageAdapter(view);
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -127,23 +126,12 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         }
     }
 
-    private void actionArgument() {
-        String key = getResources().getString(R.string.note_key_remembering);
-        NoteFragmentArgs noteFragmentArgs = NoteFragmentArgs.fromBundle(getArguments());
-        if (noteFragmentArgs.getTypeNote().equals(key)) {
-            //Create remembering window
-            ReminderDialogFragment reminderDialogFragment = ReminderDialogFragment.newInstance();
-            reminderDialogFragment.show(fm, "reminder_dialog_fragment");
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.note_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -162,6 +150,43 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d(getClass().getSimpleName(), "onActivityResult");
+        if (requestCode == CAMERA_PICK_CODE && resultCode == Activity.RESULT_OK) {
+            Log.d(getClass().getSimpleName(), "Image with camera");
+            if (data != null) {
+                Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                mAdapter.addImage(selectedImage);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+        if (requestCode == STORAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
+            Log.d(getClass().getSimpleName(), "Image with storage");
+            try {
+                assert data != null;
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+//                imageView.setImageBitmap(selectedImage);
+                mAdapter.addImage(selectedImage);
+                mAdapter.notifyDataSetChanged();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void actionArgument() {
+        String key = getResources().getString(R.string.note_key_remembering);
+        NoteFragmentArgs noteFragmentArgs = NoteFragmentArgs.fromBundle(getArguments());
+        if (noteFragmentArgs.getTypeNote().equals(key)) {
+            //Create remembering window
+            ReminderDialogFragment reminderDialogFragment = ReminderDialogFragment.newInstance();
+            reminderDialogFragment.show(fm, "reminder_dialog_fragment");
+        }
     }
 
     private void navBottomListener() {
@@ -188,6 +213,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                         break;
                     case R.id.nav_menu_4:
                         Log.d("Navigation", "Menu 4");
+                        Snackbar.make(view,"Currently under development.",Snackbar.LENGTH_LONG).show();
                         break;
                     case R.id.nav_menu_5:
                         Log.d("Navigation", "Menu 5");
@@ -257,34 +283,6 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
             startActivityForResult(intent, STORAGE_PICK_CODE);
         }
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d(getClass().getSimpleName(), "onActivityResult");
-        if (requestCode == CAMERA_PICK_CODE && resultCode == Activity.RESULT_OK) {
-            Log.d(getClass().getSimpleName(), "Image with camera");
-            if (data != null) {
-                Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                mAdapter.addImage(selectedImage);
-                mAdapter.notifyDataSetChanged();
-            }
-        }
-        if (requestCode == STORAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
-            Log.d(getClass().getSimpleName(), "Image with storage");
-            try {
-                assert data != null;
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-//                imageView.setImageBitmap(selectedImage);
-                mAdapter.addImage(selectedImage);
-                mAdapter.notifyDataSetChanged();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
     @Override
     public void dataListener(String date, String time) {

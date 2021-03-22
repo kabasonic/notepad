@@ -9,6 +9,8 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <!--    Shared preferences keys     -->
     <string name="shared_preferences_notepad">SHARED_PREFERENCES_NOTEPAD</string>
     <string name="saved_on_boarding_status_key">SAVED_ON_BOARDING_STATUS_KEY</string>
+    <string name="saved_displaying_elements">SAVED_DISPLAYING_ELEMENTS</string>
+    <string name="saved_displaying_text_note">SAVED_DISPLAYING_TEXT_NOTE</string>
     <string name="notes">Notes</string>
     <string name="favorite">Favorite</string>
     <string name="reminders">Reminders</string>
@@ -47,6 +49,9 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="color_picker">Color picker</string>
     <string name="add_your_photo_with_camera">Add Your photo with camera</string>
     <string name="add_your_photo_with_gallery">Add Your photo with gallery</string>
+    <string name="displaying_text_notes">Displaying text notes</string>
+    <string name="show">Show</string>
+    <string name="hide">Hide</string>
     <array name="data_spinner">
         <item>Dont repeat</item>
         <item>Every day</item>

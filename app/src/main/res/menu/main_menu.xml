@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:title="@string/sorting">
         <menu >
@@ -19,11 +20,27 @@
         <menu >
             <group android:checkableBehavior="single">
                 <item android:id="@+id/display_plate"
+                    app:showAsAction="always"
                     android:title="@string/plate" />
                 <item android:id="@+id/display_row"
-                    android:title="@string/row" />
+                    android:title="@string/row"
+                    app:showAsAction="always"/>
             </group>
         </menu>
     </item>
+
+    <item android:title="@string/displaying_text_notes">
+        <menu >
+            <group android:checkableBehavior="single">
+                <item android:id="@+id/show_text_notes_on"
+                    app:showAsAction="ifRoom"
+                    android:title="@string/show" />
+                <item android:id="@+id/show_text_notes_off"
+                    android:title="@string/hide"
+                    app:showAsAction="ifRoom"/>
+            </group>
+        </menu>
+    </item>
+
 
 </menu>
