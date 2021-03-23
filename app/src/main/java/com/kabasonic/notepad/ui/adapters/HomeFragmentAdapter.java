@@ -14,62 +14,81 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kabasonic.notepad.R;
+import com.kabasonic.notepad.data.Note;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapter.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<Note> mRowItem;
+    private List<Note> mRowItem;
+
+
+    public interface OnItemClickListener{
+        void onClickItemView(Note note);
+    }
+
+    OnItemClickListener mListener;
+
+    public void setOnItemClickListener(OnItemClickListener mListener){
+        this.mListener = mListener;
+    }
 
     public HomeFragmentAdapter() {
         //empty constructor
     }
 
-    public HomeFragmentAdapter(Context context, ArrayList<Note> mRowItem) {
+    public HomeFragmentAdapter(Context context, List<Note> mRowItem) {
         this.mContext = context;
         this.mRowItem = mRowItem;
+    }
+
+    public HomeFragmentAdapter(Context context){
+        this.mContext = context;
+        this.mRowItem = new ArrayList<>();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_row_home_fragment, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view,mListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Note noteItem = mRowItem.get(position);
-        holder.mTitle.setText(noteItem.getmTitle());
+        holder.mTitle.setText(noteItem.getTitle());
 
 
         if(displayingBody()){
-            holder.mBody.setText(noteItem.getmBody());
+            holder.mBody.setText(noteItem.getBody());
             holder.mBody.setVisibility(View.VISIBLE);
         }else{
             holder.mBodyLayout.setVisibility(View.GONE);
         }
 
-        if (noteItem.getmBadge() > 1) {
-            holder.mImageLayout.setVisibility(View.VISIBLE);
-            holder.mBadgeImage.setText(String.valueOf(noteItem.getmBadge()));
-            holder.mImage.setImageBitmap(noteItem.getmImageList().get(position));
-        } else if (noteItem.getmBadge() == 1) {
-            holder.mImageLayout.setVisibility(View.VISIBLE);
-            holder.mBadgeImage.setVisibility(View.GONE);
-            holder.mImage.setImageBitmap(noteItem.getmImageList().get(position));
-        }else {
-            holder.mImageLayout.setVisibility(View.GONE);
-        }
+
+//        if (noteItem.getmImageList().size() > 1) {
+//            holder.mImageLayout.setVisibility(View.VISIBLE);
+//            holder.mBadgeImage.setText(String.valueOf(noteItem.getmImageList().size()));
+//            holder.mImage.setImageBitmap(noteItem.getmImageList().get(position));
+//        } else if (noteItem.getmImageList().size() == 1) {
+//            holder.mImageLayout.setVisibility(View.VISIBLE);
+//            holder.mBadgeImage.setVisibility(View.GONE);
+//            holder.mImage.setImageBitmap(noteItem.getmImageList().get(position));
+//        }else {
+//            holder.mImageLayout.setVisibility(View.GONE);
+//        }
 
     }
 
     @Override
     public int getItemCount() {
-        if (mRowItem.size() == 0)
+        if (mRowItem == null)
             return 0;
         else
             return mRowItem.size();
@@ -78,6 +97,15 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
 //    public ArrayList<Note> getmRowItem(){
 //        return mRowItem;
 //    }
+
+    public void setDataAdapter(List<Note> noteList){
+        this.mRowItem = noteList;
+        notifyDataSetChanged();
+    }
+
+    public Note getNoteAt(int position){
+        return mRowItem.get(position);
+    }
 
     private boolean displayingBody(){
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getResources().getString(R.string.shared_preferences_notepad), MODE_PRIVATE);
@@ -98,7 +126,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
         public LinearLayout mBodyLayout;
 
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, final OnItemClickListener mListener) {
             super(itemView);
 
             mTitle = itemView.findViewById(R.id.title_row_home);
@@ -107,6 +135,15 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
             mImage = itemView.findViewById(R.id.image_row_home_fragment);
             mImageLayout = itemView.findViewById(R.id.layout_image_home_fragment);
             mBodyLayout = itemView.findViewById(R.id.body_layout);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onClickItemView(getNoteAt(getAdapterPosition()));
+                }
+            });
+
+
         }
     }
 

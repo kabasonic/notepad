@@ -57,8 +57,7 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
     }
 
     public static ReminderDialogFragment newInstance() {
-        ReminderDialogFragment reminderDialogFragment = new ReminderDialogFragment();
-        return reminderDialogFragment;
+        return new ReminderDialogFragment();
     }
 
     @Override
