@@ -49,7 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class NoteFragment extends Fragment implements ColorPickerDialogFragment.ColorPickerListener, FilePickerDialogFragment.FilePickerListener, ReminderDialogFragment.DataReminderListener {
+public class NoteFragment extends Fragment implements ColorPickerDialogFragment.OnClickColorPickerListener, FilePickerDialogFragment.OnClickFilePickerListener, ReminderDialogFragment.OnClickReminderListener {
 
     public static final int CAMERA_PICK_CODE = 0;
     public static final int STORAGE_PICK_CODE = 1;
@@ -59,16 +59,16 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     private BottomNavigationView bottomNavigationView;
     private LinearLayout linearLayout;
     private FragmentManager fm;
-    private EditText editBodyText, editTitleText;
+    private EditText fieldBody, fieldTitle;
     private RecyclerView mRecyclerView;
     private ImageNoteFragmentAdapter mAdapter;
     private Chip chipAlarm;
     private TextView lastChange;
 
-    private NoteFragmentArgs noteFragmentArgs;
+    private NoteFragmentArgs getFragmentArguments;
     private NoteViewModel noteViewModel;
     private Note currentNote;
-    private int color = 0xffffffff;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -79,17 +79,13 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         view = inflater.inflate(R.layout.fragment_note, container, false);
-        bottomNavigationView = view.findViewById(R.id.bottom_navigation_create_note);
-        linearLayout = view.findViewById(R.id.layout_create_note);
         fm = getActivity().getSupportFragmentManager();
-        editBodyText = view.findViewById(R.id.edit_body_text_note);
-        editTitleText = view.findViewById(R.id.edit_title_text_note);
-        chipAlarm = view.findViewById(R.id.alarm_chip);
-        lastChange = view.findViewById(R.id.last_change);
+        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
+        //associate view elements with NoteFragment.class
+        setViewElements();
         setHasOptionsMenu(true);
-        getNavigationFragmentArguments();
+        setIncomingArguments();
         return view;
     }
 
@@ -98,7 +94,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         super.onViewCreated(view, savedInstanceState);
         setChipAlarmListener();
         setBottomNavigationListener();
-        buildImageAdapter(view);
+        buildAdapterForImages(view);
     }
 
     @Override
@@ -122,7 +118,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 break;
             case R.id.delete_note:
                 Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_LONG).show();
-                deleteNote();
+                noteViewModel.delete(this.currentNote);
                 NavDirections action = NoteFragmentDirections.actionNoteFragmentToHomeFragment();
                 Navigation.findNavController(view).navigate(action);
                 break;
@@ -134,21 +130,20 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
 
     @Override
     public void onDestroyView() {
-        if(noteFragmentArgs.getNoteId() == -1 && (!getTitle().isEmpty() || !getBody().isEmpty())){
-            noteViewModel.insert(new Note(getTitle(),getBody(),getColor(),getCurrentDate()));
+
+        if (getFragmentArguments.getNoteId() == -1 && (!getTitleView().isEmpty() || !getBodyView().isEmpty())) {
+            noteViewModel.insert(getValuesFromView());
             Snackbar.make(view, "Note saved.", Snackbar.LENGTH_SHORT).show();
+        }else if (getFragmentArguments.getNoteId() >= 0) {
+            if (!getTitleView().isEmpty() || !getBodyView().isEmpty()) {
+                noteViewModel.update(this.currentNote);
+                Snackbar.make(view, "Note updated.", Snackbar.LENGTH_SHORT).show();
+            } else if (getTitleView().isEmpty() && getBodyView().isEmpty()) {
+                noteViewModel.delete(this.currentNote);
+                Snackbar.make(view, "Empty note deleted.", Snackbar.LENGTH_SHORT).show();
+            }
         }
-        if(noteFragmentArgs.getNoteId() >= 0){
-                Note noteUpdate = new Note(getTitle(),getBody(),getColor(),getCurrentDate());
-                if( !getTitle().isEmpty() || !getBody().isEmpty() ){
-                    noteUpdate.setId(noteFragmentArgs.getNoteId());
-                    noteViewModel.update(noteUpdate);
-                    Snackbar.make(view, "Note updated.", Snackbar.LENGTH_SHORT).show();
-                }else if(getTitle().isEmpty() && getBody().isEmpty()){
-                    noteViewModel.delete(currentNote);
-                    Snackbar.make(view, "Empty note deleted.", Snackbar.LENGTH_SHORT).show();
-                }
-        }
+
         super.onDestroyView();
     }
 
@@ -175,49 +170,13 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         }
     }
 
-    @Override
-    public void selectedColor(int color) {
-        linearLayout.setBackgroundColor(color);
-        setColor(color);
-    }
-
-    @Override
-    public void loadImage(int key) {
-        Intent intent;
-        if (key == 0) {
-            intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, CAMERA_PICK_CODE);
-        } else if (key == 1) {
-            intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            startActivityForResult(intent, STORAGE_PICK_CODE);
-        }
-    }
-
-    @Override
-    public void dataListener(String date, String time) {
-        String textAlarmChip = date + " " + time;
-        chipAlarm.setText(textAlarmChip);
-        chipAlarm.setVisibility(View.VISIBLE);
-    }
-
-
-    private void getNavigationFragmentArguments() {
-        String key = getResources().getString(R.string.note_key_remembering);
-
-        assert getArguments() != null;
-        noteFragmentArgs = NoteFragmentArgs.fromBundle(getArguments());
-
-        if (noteFragmentArgs.getTypeNote().equals(key)) {
-            //Create remembering window
-            DialogFragment dialogReminder = new ReminderDialogFragment(NoteFragment.this);
-            dialogReminder.show(fm, "reminder_dialog_fragment");
-        }
-
-        if (noteFragmentArgs.getNoteId() >= 0) {
-            getNote(noteFragmentArgs.getNoteId());
-            setCurrentNote();
-        }
+    private void setViewElements() {
+        bottomNavigationView = view.findViewById(R.id.bottom_navigation_create_note);
+        linearLayout = view.findViewById(R.id.layout_create_note);
+        fieldBody = view.findViewById(R.id.edit_body_text_note);
+        fieldTitle = view.findViewById(R.id.edit_title_text_note);
+        chipAlarm = view.findViewById(R.id.alarm_chip);
+        lastChange = view.findViewById(R.id.last_change);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -225,27 +184,21 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_menu_1:
-                    Log.d("Navigation", "Menu 1");
-                    //openColorDialog();
                     DialogFragment dialogColorPicker = new ColorPickerDialogFragment(NoteFragment.this);
                     dialogColorPicker.show(fm, "color_picker");
                     break;
                 case R.id.nav_menu_2:
-                    Log.d("Navigation", "Menu 2");
                     DialogFragment dialogReminder = new ReminderDialogFragment(NoteFragment.this);
                     dialogReminder.show(fm, "reminder_dialog_fragment");
                     break;
                 case R.id.nav_menu_3:
-                    Log.d("Navigation", "Menu 3");
                     DialogFragment dialogFilePicker = new FilePickerDialogFragment(NoteFragment.this, getActivity());
                     dialogFilePicker.show(fm, "file_picker");
                     break;
                 case R.id.nav_menu_4:
-                    Log.d("Navigation", "Menu 4");
                     Snackbar.make(view, "Currently under development.", Snackbar.LENGTH_LONG).show();
                     break;
                 case R.id.nav_menu_5:
-                    Log.d("Navigation", "Menu 5");
                     Snackbar.make(view, "Note has been added to favorite.", Snackbar.LENGTH_LONG).show();
                     break;
             }
@@ -253,7 +206,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         });
     }
 
-    private void buildImageAdapter(View view) {
+    private void buildAdapterForImages(View view) {
         ArrayList<ImageItem> exampleList = new ArrayList<>();
         mRecyclerView = view.findViewById(R.id.note_image_rv);
         mRecyclerView.setHasFixedSize(true);
@@ -262,6 +215,29 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         setImageAdapterOnClickListener();
+    }
+
+    private void setVisibilityImages() {
+        if (mAdapter.getItemCount() != 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+        }
+    }
+
+    //#listeners start
+    private void setChipAlarmListener() {
+        chipAlarm.setOnCloseIconClickListener(v -> new AlertDialog.Builder(mContext)
+                .setTitle("Reminder")
+                .setMessage("Are you sure you want to delete the reminder time?")
+                .setPositiveButton("YES", (dialog, which) -> {
+                    chipAlarm.setVisibility(View.GONE);
+                    Snackbar.make(view, "Alarm reminder has been deleted.", Snackbar.LENGTH_LONG).show();
+                })
+                .setNegativeButton("NO", (dialog, which) -> {
+                })
+                .create()
+                .show());
     }
 
     private void setImageAdapterOnClickListener() {
@@ -287,79 +263,94 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
             }
         });
     }
+    //#listeners end
 
-    private void deleteNote() {
-        noteViewModel.getNoteById(noteFragmentArgs.getNoteId()).observe(getViewLifecycleOwner(), note -> {
-            noteViewModel.delete(note);
-        });
-    }
-
-    private void getNote(int noteId) {
-        noteViewModel.getNoteById(noteId).observe(getViewLifecycleOwner(), note -> {
-            editTitleText.setText(note.getTitle());
-            editBodyText.setText(note.getBody());
-            linearLayout.setBackgroundColor(note.getBackgroundColor());
-            Date date = new Date(note.getLastTimeUpdate());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm dd/MM/yyyy ");
-            String dateResult = "Last edit: " + dateFormat.format(date);
-            lastChange.setText(dateResult);
-        });
-
-    }
-
-    private void setVisibilityImages() {
-        if (mAdapter.getItemCount() != 0) {
-            mRecyclerView.setVisibility(View.VISIBLE);
+    private void setIncomingArguments() {
+        String key = getResources().getString(R.string.note_key_remembering);
+        assert getArguments() != null;
+        getFragmentArguments = NoteFragmentArgs.fromBundle(getArguments());
+        if (getFragmentArguments.getTypeNote().equals(key) && getFragmentArguments.getNoteId() == -1) {
+            //Create remembering window
+            DialogFragment dialogReminder = new ReminderDialogFragment(NoteFragment.this);
+            dialogReminder.show(fm, "reminder_dialog_fragment");
         } else {
-            mRecyclerView.setVisibility(View.GONE);
+            createObjectCurrentNote();
         }
     }
 
-    private void setChipAlarmListener() {
-        chipAlarm.setOnCloseIconClickListener(v -> new AlertDialog.Builder(mContext)
-                .setTitle("Reminder")
-                .setMessage("Are you sure you want to delete the reminder time?")
-                .setPositiveButton("YES", (dialog, which) -> {
-                    chipAlarm.setVisibility(View.GONE);
-                    Snackbar.make(view, "Alarm reminder has been deleted.", Snackbar.LENGTH_LONG).show();
-                })
-                .setNegativeButton("NO", (dialog, which) -> {
-                })
-                .create()
-                .show());
+    private void createObjectCurrentNote() {
+        if (getFragmentArguments.getNoteId() != -1 && getFragmentArguments.getNoteId() >= 0) {
+            this.currentNote = new Note();
+            noteViewModel.getNoteById(getFragmentArguments.getNoteId()).observe(getViewLifecycleOwner(), note -> {
+                this.currentNote.setId(note.getId());
+                this.currentNote.setTitle(note.getTitle());
+                this.currentNote.setBody(note.getBody());
+                this.currentNote.setBackgroundColor(note.getBackgroundColor());
+                this.currentNote.setLastTimeUpdate(note.getLastTimeUpdate());
+                setValuesToView();
+            });
+        } else {
+            this.currentNote = new Note();
+        }
     }
 
-    private String getTitle(){
-        return editTitleText.getText().toString();
+    private void setValuesToView() {
+        fieldTitle.setText(this.currentNote.getTitle());
+        fieldBody.setText(this.currentNote.getBody());
+        linearLayout.setBackgroundColor(this.currentNote.getBackgroundColor());
+        lastChange.setText(getNoteCurrentDate(this.currentNote.getLastTimeUpdate()));
     }
 
-    private String getBody(){
-        return editBodyText.getText().toString();
+    private Note getValuesFromView(){
+        return new Note(
+                fieldTitle.getText().toString(),
+                fieldBody.getText().toString(),
+                this.currentNote.getBackgroundColor(),
+                new Date().getTime()
+        );
     }
 
-    private int getColor(){
-        return this.color;
+    private String getTitleView() {
+        return fieldTitle.getText().toString();
     }
 
-    private void setColor(int color){
-        this.color = color;
+    private String getBodyView() {
+        return fieldBody.getText().toString();
     }
 
-    private long getCurrentDate(){
-        return new Date().getTime();
+    private String getNoteCurrentDate(long value) {
+        Date date = new Date(value);
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm dd/MM/yyyy");
+        return dateFormat.format(date);
+
     }
 
-    private void setCurrentNote(){
-        this.currentNote = new Note();
-        noteViewModel.getNoteById(noteFragmentArgs.getNoteId()).observe(getViewLifecycleOwner(), note -> {
-            this.currentNote.setId(note.getId());
-            this.currentNote.setTitle(note.getTitle());
-            this.currentNote.setBody(note.getBody());
-            this.currentNote.setBackgroundColor(note.getBackgroundColor());
-            this.currentNote.setLastTimeUpdate(note.getLastTimeUpdate());
-        });
+    // interface methods
+    @Override
+    public void setSelectedColor(int color) {
+        linearLayout.setBackgroundColor(color);
+        this.currentNote.setBackgroundColor(color);
     }
 
+    @Override
+    public void imageLoader(int key) {
+        Intent intent;
+        if (key == 0) {
+            intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAMERA_PICK_CODE);
+        } else if (key == 1) {
+            intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, STORAGE_PICK_CODE);
+        }
+    }
 
+    @Override
+    public void dataListener(String date, String time) {
+        String textAlarmChip = date + " " + time;
+        chipAlarm.setText(textAlarmChip);
+        chipAlarm.setVisibility(View.VISIBLE);
+    }
 }
 

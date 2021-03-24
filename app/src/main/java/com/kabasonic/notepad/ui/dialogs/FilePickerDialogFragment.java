@@ -37,11 +37,11 @@ public class FilePickerDialogFragment extends DialogFragment implements View.OnC
         this.mContext = context;
     }
 
-    public interface FilePickerListener {
-        void loadImage(int key);
+    public interface OnClickFilePickerListener {
+        void imageLoader(int key);
     }
 
-    FilePickerListener mListener;
+    OnClickFilePickerListener mListener;
 
     public FilePickerDialogFragment(NoteFragment noteFragment, Activity activity) {
         this.mListener = noteFragment;
@@ -68,7 +68,7 @@ public class FilePickerDialogFragment extends DialogFragment implements View.OnC
         if (v.getId() == R.id.linear_1) {
             if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 Log.d(getClass().getSimpleName(), "Permission granted");
-                mListener.loadImage(0);
+                mListener.imageLoader(0);
             } else {
                 Log.d(getClass().getSimpleName(), "Permission denied");
                 requestCameraPermission();
@@ -77,7 +77,7 @@ public class FilePickerDialogFragment extends DialogFragment implements View.OnC
 
             if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Log.d(getClass().getSimpleName(), "Permission granted");
-                mListener.loadImage(1);
+                mListener.imageLoader(1);
             } else {
                 Log.d(getClass().getSimpleName(), "Permission denied");
                 requestStoragePermission();

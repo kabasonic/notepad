@@ -42,18 +42,18 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
 
     private FragmentManager fm;
 
-    public interface DataReminderListener{
+    public interface OnClickReminderListener {
         void dataListener(String date, String time);
     }
 
-    DataReminderListener mListener;
+    OnClickReminderListener mListener;
 
     public ReminderDialogFragment() {
 
     }
 
     public ReminderDialogFragment(NoteFragment noteFragment){
-        this.mListener = (DataReminderListener) noteFragment;
+        this.mListener = (OnClickReminderListener) noteFragment;
     }
 
     public static ReminderDialogFragment newInstance() {

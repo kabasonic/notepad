@@ -23,15 +23,14 @@ public class ColorPickerDialogFragment extends DialogFragment implements DialogI
 
     private View view;
 
-    public interface ColorPickerListener {
-        void selectedColor(int color);
-
+    public interface OnClickColorPickerListener {
+        void setSelectedColor(int color);
     }
 
-    ColorPickerListener mListener;
+    OnClickColorPickerListener mListener;
 
     public ColorPickerDialogFragment(NoteFragment noteFragment){
-        this.mListener = (ColorPickerListener) noteFragment;
+        this.mListener = (OnClickColorPickerListener) noteFragment;
     }
 
     @SuppressLint("InflateParams")
@@ -79,22 +78,22 @@ public class ColorPickerDialogFragment extends DialogFragment implements DialogI
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.color_1:
-                mListener.selectedColor(ContextCompat.getColor(getContext(), R.color.colorLightBlue));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorLightBlue));
                 break;
             case R.id.color_2:
-                mListener.selectedColor(ContextCompat.getColor(getContext(), R.color.colorLightGreen));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorLightGreen));
                 break;
             case R.id.color_3:
-                mListener.selectedColor(ContextCompat.getColor(getContext(), R.color.colorOrange));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorOrange));
                 break;
             case R.id.color_4:
-                mListener.selectedColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorRed));
                 break;
             case R.id.color_5:
-                mListener.selectedColor(ContextCompat.getColor(getContext(), R.color.colorYellow));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorYellow));
                 break;
             case R.id.color_6:
-                mListener.selectedColor(ContextCompat.getColor(getContext(), R.color.colorPurple));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorPurple));
                 break;
         }
         Objects.requireNonNull(getDialog()).dismiss();

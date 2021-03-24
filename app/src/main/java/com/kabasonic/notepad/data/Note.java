@@ -29,7 +29,7 @@ public class Note {
     private boolean reminderIsSet;
 
     @ColumnInfo(name = "backgroundColor")
-    private int backgroundColor;
+    private int backgroundColor = 0xffffff;
 
     @Ignore
     public Note(){
@@ -92,6 +92,7 @@ public class Note {
     }
 
     public int getBackgroundColor() {
+
         return backgroundColor;
     }
 
