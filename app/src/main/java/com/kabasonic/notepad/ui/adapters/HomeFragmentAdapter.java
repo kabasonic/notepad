@@ -61,9 +61,9 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Note noteItem = mRowItem.get(position);
+
         holder.mTitle.setText(noteItem.getTitle());
-
-
+        holder.mLinearLayout.setBackgroundColor(noteItem.getBackgroundColor());
         if(displayingBody()){
             holder.mBody.setText(noteItem.getBody());
             holder.mBody.setVisibility(View.VISIBLE);
@@ -118,6 +118,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        public LinearLayout mLinearLayout;
         public TextView mTitle;
         public TextView mBody;
         public TextView mBadgeImage;
@@ -129,6 +130,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
         public ViewHolder(@NonNull View itemView, final OnItemClickListener mListener) {
             super(itemView);
 
+            mLinearLayout = itemView.findViewById(R.id.linear_row_home_fragment);
             mTitle = itemView.findViewById(R.id.title_row_home);
             mBody = itemView.findViewById(R.id.body_text_home_fragment);
             mBadgeImage = itemView.findViewById(R.id.badge_image_home_fragment);

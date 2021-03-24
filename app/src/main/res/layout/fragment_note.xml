@@ -71,7 +71,7 @@
                 android:id="@+id/last_change"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Last edit: Monday 23:48"
+                android:text=""
                 android:gravity="right"
                 android:paddingTop="8dp"
                 android:paddingBottom="16dp"

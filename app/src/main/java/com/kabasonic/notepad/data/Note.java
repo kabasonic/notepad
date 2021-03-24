@@ -5,8 +5,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-
 @Entity(tableName = "note_table")
 
 public class Note {
@@ -22,7 +20,7 @@ public class Note {
     private String body;
 
     @ColumnInfo(name = "lastTimeUpdate_column")
-    private Date lastTimeUpdate;
+    private long lastTimeUpdate;
 
     @ColumnInfo(name = "favorite_column")
     private boolean favorite;
@@ -38,11 +36,11 @@ public class Note {
         //empty constructor
     }
 
-    public Note(String title, String body,  int backgroundColor) {
+    public Note(String title, String body,  int backgroundColor, long lastTimeUpdate) {
         this.title = title;
         this.body = body;
-
         this.backgroundColor = backgroundColor;
+        this.lastTimeUpdate = lastTimeUpdate;
     }
 
     public int getId() {
@@ -69,11 +67,11 @@ public class Note {
         this.body = body;
     }
 
-    public Date getLastTimeUpdate() {
+    public long getLastTimeUpdate() {
         return lastTimeUpdate;
     }
 
-    public void setLastTimeUpdate(Date lastTimeUpdate) {
+    public void setLastTimeUpdate(long lastTimeUpdate) {
         this.lastTimeUpdate = lastTimeUpdate;
     }
 

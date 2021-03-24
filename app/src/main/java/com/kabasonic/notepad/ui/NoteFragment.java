@@ -45,7 +45,9 @@ import com.kabasonic.notepad.ui.reminder.ReminderDialogFragment;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class NoteFragment extends Fragment implements ColorPickerDialogFragment.ColorPickerListener, FilePickerDialogFragment.FilePickerListener, ReminderDialogFragment.DataReminderListener {
 
@@ -133,11 +135,11 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     @Override
     public void onDestroyView() {
         if(noteFragmentArgs.getNoteId() == -1 && (!getTitle().isEmpty() || !getBody().isEmpty())){
-            noteViewModel.insert(new Note(getTitle(),getBody(),getColor()));
+            noteViewModel.insert(new Note(getTitle(),getBody(),getColor(),getCurrentDate()));
             Snackbar.make(view, "Note saved.", Snackbar.LENGTH_SHORT).show();
         }
         if(noteFragmentArgs.getNoteId() >= 0){
-                Note noteUpdate = new Note(getTitle(),getBody(),getColor());
+                Note noteUpdate = new Note(getTitle(),getBody(),getColor(),getCurrentDate());
                 if( !getTitle().isEmpty() || !getBody().isEmpty() ){
                     noteUpdate.setId(noteFragmentArgs.getNoteId());
                     noteViewModel.update(noteUpdate);
@@ -297,6 +299,10 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
             editTitleText.setText(note.getTitle());
             editBodyText.setText(note.getBody());
             linearLayout.setBackgroundColor(note.getBackgroundColor());
+            Date date = new Date(note.getLastTimeUpdate());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm dd/MM/yyyy ");
+            String dateResult = "Last edit: " + dateFormat.format(date);
+            lastChange.setText(dateResult);
         });
 
     }
@@ -339,6 +345,10 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         this.color = color;
     }
 
+    private long getCurrentDate(){
+        return new Date().getTime();
+    }
+
     private void setCurrentNote(){
         this.currentNote = new Note();
         noteViewModel.getNoteById(noteFragmentArgs.getNoteId()).observe(getViewLifecycleOwner(), note -> {
@@ -346,6 +356,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
             this.currentNote.setTitle(note.getTitle());
             this.currentNote.setBody(note.getBody());
             this.currentNote.setBackgroundColor(note.getBackgroundColor());
+            this.currentNote.setLastTimeUpdate(note.getLastTimeUpdate());
         });
     }
 

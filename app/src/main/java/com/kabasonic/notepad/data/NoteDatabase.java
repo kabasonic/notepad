@@ -8,11 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Note.class}, version = 3)
-@TypeConverters({Converters.class})
+@Database(entities = {Note.class}, version = 5)
+//@TypeConverters({Converters.class})
 public abstract class NoteDatabase extends RoomDatabase {
 
     private static NoteDatabase instance;
