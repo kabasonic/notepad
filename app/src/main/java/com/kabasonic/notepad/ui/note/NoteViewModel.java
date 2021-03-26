@@ -29,6 +29,10 @@ public class NoteViewModel extends AndroidViewModel {
         noteRepository.insert(noteWithImages);
     }
 
+    public void updateNoteWithImages(NoteWithImages noteWithImages){
+        noteRepository.update(noteWithImages);
+    }
+
     public void deleteNoteWithImages(Image image){
         noteRepository.deleteImageWithNote(image);
     }

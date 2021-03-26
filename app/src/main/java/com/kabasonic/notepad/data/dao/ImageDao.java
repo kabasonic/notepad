@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -14,10 +15,13 @@ import java.util.List;
 @Dao
 public interface ImageDao {
 
-    @Insert
+    @Query("SELECT last_insert_rowid() FROM image_table")
+    int getLastId();
+
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insert(Image image);
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(Image image);
 
     @Delete

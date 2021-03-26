@@ -32,6 +32,34 @@ public class NoteRepository {
         new DeleteImageWithNoteAsyncTask(imageDao).execute(image);
     }
 
+    public void update(NoteWithImages noteWithImages){
+        new UpdateNoteWithImagesAsyncTask(noteDao, imageDao).execute(noteWithImages);
+    }
+
+    private static class UpdateNoteWithImagesAsyncTask extends AsyncTask<NoteWithImages,Void,Void>{
+        private NoteDao noteDao;
+        private ImageDao imageDao;
+
+        private UpdateNoteWithImagesAsyncTask(NoteDao noteDao, ImageDao imageDao){
+            this.noteDao = noteDao;
+            this.imageDao = imageDao;
+        }
+
+        @Override
+        protected Void doInBackground(NoteWithImages... noteWithImages) {
+
+            noteDao.updateNote(noteWithImages[0].note);
+
+            for(Image image: noteWithImages[0].imageList){
+                if(image.getId() == 0 && image.getIdFkNote() == 0){
+                    image.setIdFkNote(noteWithImages[0].note.getId());
+                    imageDao.insert(image);
+                }
+            }
+            return null;
+        }
+    }
+
     private static class DeleteImageWithNoteAsyncTask extends AsyncTask<Image, Void, Void>{
 
         private ImageDao imageDao;
@@ -72,7 +100,7 @@ public class NoteRepository {
     }
 
     public LiveData<NoteWithImages> getNoteWithImages(int idNote){
-        return noteDao.getNoteWithImage(idNote);
+        return noteDao.getNoteWithImages(idNote);
     }
 
 

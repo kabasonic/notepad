@@ -20,14 +20,12 @@ import java.util.List;
 public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFragmentAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<String> mImageItems;
     private List<Image> mImageList;
     private OnItemClickListener mListener;
 
 
     public interface OnItemClickListener {
         void onItemClickDeleteImage(int position);
-
         void onItemClickPickImage(int position);
 
     }
@@ -38,11 +36,11 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
 
     public ImageNoteFragmentAdapter(Context context) {
         this.mContext = context;
-        this.mImageItems = new ArrayList<>();
+        this.mImageList = new ArrayList<>();
     }
 
     public void deleteImageItem(int position) {
-        mImageItems.remove(position);
+        mImageList.remove(position);
     }
 
     @NonNull
@@ -54,32 +52,27 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //holder.mImage.setImageBitmap(mImageItems.get(position));
-            Glide.with(mContext).load(mImageItems.get(position)).into(holder.mImage);
-
+        //holder.mImage.setImageBitmap(mImageList.get(position));
+            Glide.with(mContext).load(mImageList.get(position).getUri()).into(holder.mImage);
     }
 
     @Override
     public int getItemCount() {
-        if (mImageItems.size() == 0)
+        if (mImageList.size() == 0)
             return 0;
-        else return mImageItems.size();
+        else return mImageList.size();
     }
 
-    public void addImageToList(String toString) {
-        this.mImageItems.add(toString);
-    }
-
-    public List<String> getAllImageList(){
-        return this.mImageItems;
-    }
-
-    public void setImagesToList(List<String> mImageList){
-        this.mImageItems = mImageList;
-    }
-
-    public void setImageObjectToList(List<Image> imageList){
+    public void setImageFromBD(List<Image> imageList){
         this.mImageList = imageList;
+    }
+
+    public List<Image> getImageList() {
+        return mImageList;
+    }
+
+    public void addImageToList(Image image){
+        this.mImageList.add(image);
     }
 
     public Image getAtImageItem(int position){

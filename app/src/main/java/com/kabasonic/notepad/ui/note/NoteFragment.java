@@ -43,9 +43,7 @@ import com.kabasonic.notepad.ui.dialogs.FilePickerDialogFragment;
 import com.kabasonic.notepad.ui.reminder.ReminderDialogFragment;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class NoteFragment extends Fragment implements ColorPickerDialogFragment.OnClickColorPickerListener, FilePickerDialogFragment.OnClickFilePickerListener, ReminderDialogFragment.OnClickReminderListener {
 
@@ -123,11 +121,15 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     public void onDestroyView() {
         if (getFragmentArguments.getNoteId() == -1 && (!getTitleView().isEmpty() || !getBodyView().isEmpty())) {
             //Insert Note
-            noteViewModel.insertNoteWithImages(new NoteWithImages(getNoteValuesFromView(), getImageValuesFromView()));
+            noteViewModel.insertNoteWithImages(new NoteWithImages(getNoteValuesFromView(), mAdapter.getImageList()));
             Snackbar.make(view, "Note saved.", Snackbar.LENGTH_SHORT).show();
         } else if (getFragmentArguments.getNoteId() >= 0) {
             if (!getTitleView().isEmpty() || !getBodyView().isEmpty()) {
                 //Update Note
+                Note note = getNoteValuesFromView();
+                note.setId(getFragmentArguments.getNoteId());
+
+                noteViewModel.updateNoteWithImages(new NoteWithImages(note,mAdapter.getImageList()));
                 Snackbar.make(view, "Note updated.", Snackbar.LENGTH_SHORT).show();
             } else if (getTitleView().isEmpty() && getBodyView().isEmpty()) {
                 //Delete note
@@ -149,7 +151,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
             } else if (requestCode == STORAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 // Add to database image to database and update Adapter
-                mAdapter.addImageToList(imageUri.toString());
+                mAdapter.addImageToList(new Image(imageUri.toString()));
                 setVisibilityImages();
             }
             mAdapter.notifyDataSetChanged();
@@ -270,20 +272,13 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         if (getFragmentArguments.getNoteId() != -1 && getFragmentArguments.getNoteId() >= 0) {
             this.currentNote = new Note();
             noteViewModel.getNoteWithImages(getFragmentArguments.getNoteId()).observe(getViewLifecycleOwner(), noteWithImages -> {
-               List<String> imageList = new ArrayList<>();
-               List<Image> imageListObject = new ArrayList<>();
                 this.currentNote.setId(noteWithImages.note.getId());
                 this.currentNote.setTitle(noteWithImages.note.getTitle());
                 this.currentNote.setBody(noteWithImages.note.getBody());
                 this.currentNote.setBackgroundColor(noteWithImages.note.getBackgroundColor());
                 this.currentNote.setLastTimeUpdate(noteWithImages.note.getLastTimeUpdate());
-                for (int i=0;i<noteWithImages.imageList.size();i++) {
-                    imageList.add(noteWithImages.imageList.get(i).getUri());
-                    imageListObject.add(noteWithImages.imageList.get(i));
-                    Log.d("ImageList","item: " + imageList.get(i));
-                }
-                mAdapter.setImageObjectToList(imageListObject);
-                mAdapter.setImagesToList(imageList);
+
+                mAdapter.setImageFromBD(noteWithImages.imageList);
                 mAdapter.notifyDataSetChanged();
                 setVisibilityImages();
                 setValuesToView();
@@ -298,14 +293,6 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         fieldBody.setText(this.currentNote.getBody());
         linearLayout.setBackgroundColor(this.currentNote.getBackgroundColor());
         lastChange.setText(getNoteCurrentDate(this.currentNote.getLastTimeUpdate()));
-    }
-
-    private List<Image> getImageValuesFromView() {
-        List<Image> imageList = new ArrayList<>();
-        for (int i = 0; i < mAdapter.getAllImageList().size(); i++) {
-            imageList.add(new Image(mAdapter.getAllImageList().get(i)));
-        }
-        return imageList;
     }
 
     private Note getNoteValuesFromView() {
