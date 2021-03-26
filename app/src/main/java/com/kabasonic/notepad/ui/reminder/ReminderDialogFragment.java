@@ -20,7 +20,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.kabasonic.notepad.R;
-import com.kabasonic.notepad.ui.NoteFragment;
+import com.kabasonic.notepad.ui.note.NoteFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

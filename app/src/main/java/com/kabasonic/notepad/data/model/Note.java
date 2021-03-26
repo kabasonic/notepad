@@ -1,4 +1,4 @@
-package com.kabasonic.notepad.data;
+package com.kabasonic.notepad.data.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -6,29 +6,28 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "note_table")
-
 public class Note {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id_column")
+    @ColumnInfo(name = "note_id")
     private int id;
 
-    @ColumnInfo(name = "title_column")
+    @ColumnInfo(name = "note_title")
     private String title;
 
-    @ColumnInfo(name = "body_column")
+    @ColumnInfo(name = "note_body")
     private String body;
 
-    @ColumnInfo(name = "lastTimeUpdate_column")
+    @ColumnInfo(name = "note_lastTimeUpdate")
     private long lastTimeUpdate;
 
-    @ColumnInfo(name = "favorite_column")
+    @ColumnInfo(name = "note_favorite")
     private boolean favorite;
 
-    @ColumnInfo(name = "reminderIsSet_column")
+    @ColumnInfo(name = "note_reminderIsSet")
     private boolean reminderIsSet;
 
-    @ColumnInfo(name = "backgroundColor")
+    @ColumnInfo(name = "note_backgroundColor")
     private int backgroundColor = 0xffffff;
 
     @Ignore

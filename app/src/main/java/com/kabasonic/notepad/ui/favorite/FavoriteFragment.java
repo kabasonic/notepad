@@ -1,7 +1,6 @@
-package com.kabasonic.notepad.ui;
+package com.kabasonic.notepad.ui.favorite;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
-import com.google.android.material.button.MaterialButton;
 import com.kabasonic.notepad.R;
 
 public class FavoriteFragment extends Fragment {

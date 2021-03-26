@@ -13,8 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.kabasonic.notepad.R;
-import com.kabasonic.notepad.data.Note;
+import com.kabasonic.notepad.data.model.Image;
+import com.kabasonic.notepad.data.model.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
 
     private Context mContext;
     private List<Note> mRowItem;
-
+    private List<List<Image>> mImageList;
 
     public interface OnItemClickListener{
         void onClickItemView(Note note);
@@ -37,18 +39,10 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
         this.mListener = mListener;
     }
 
-    public HomeFragmentAdapter() {
-        //empty constructor
-    }
-
-    public HomeFragmentAdapter(Context context, List<Note> mRowItem) {
-        this.mContext = context;
-        this.mRowItem = mRowItem;
-    }
-
     public HomeFragmentAdapter(Context context){
         this.mContext = context;
         this.mRowItem = new ArrayList<>();
+        this.mImageList = new ArrayList<>();
     }
 
     @NonNull
@@ -64,6 +58,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
 
         holder.mTitle.setText(noteItem.getTitle());
         holder.mLinearLayout.setBackgroundColor(noteItem.getBackgroundColor());
+
         if(displayingBody()){
             holder.mBody.setText(noteItem.getBody());
             holder.mBody.setVisibility(View.VISIBLE);
@@ -71,18 +66,17 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
             holder.mBodyLayout.setVisibility(View.GONE);
         }
 
-
-//        if (noteItem.getmImageList().size() > 1) {
-//            holder.mImageLayout.setVisibility(View.VISIBLE);
-//            holder.mBadgeImage.setText(String.valueOf(noteItem.getmImageList().size()));
-//            holder.mImage.setImageBitmap(noteItem.getmImageList().get(position));
-//        } else if (noteItem.getmImageList().size() == 1) {
-//            holder.mImageLayout.setVisibility(View.VISIBLE);
-//            holder.mBadgeImage.setVisibility(View.GONE);
-//            holder.mImage.setImageBitmap(noteItem.getmImageList().get(position));
-//        }else {
-//            holder.mImageLayout.setVisibility(View.GONE);
-//        }
+        if(mImageList.get(position).size() > 1){
+                holder.mImageLayout.setVisibility(View.VISIBLE);
+                holder.mBadgeImage.setText(String.valueOf(mImageList.get(position).size()));
+                Glide.with(mContext).load(mImageList.get(position).get(mImageList.get(position).size()-1).getUri()).into(holder.mImage);
+        } else if(mImageList.get(position).size() == 1){
+            holder.mImageLayout.setVisibility(View.VISIBLE);
+            holder.mBadgeImage.setVisibility(View.GONE);
+            Glide.with(mContext).load(mImageList.get(position).get(0).getUri()).into(holder.mImage);
+        }else{
+            holder.mImageLayout.setVisibility(View.GONE);
+        }
 
     }
 
@@ -94,17 +88,16 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
             return mRowItem.size();
     }
 
-//    public ArrayList<Note> getmRowItem(){
-//        return mRowItem;
-//    }
 
-    public void setDataAdapter(List<Note> noteList){
+    public void setDataAdapter(List<Note> noteList,List<List<Image>> imageList){
         this.mRowItem = noteList;
-        notifyDataSetChanged();
+        this.mImageList = imageList;
     }
+
 
     public Note getNoteAt(int position){
         return mRowItem.get(position);
+
     }
 
     private boolean displayingBody(){

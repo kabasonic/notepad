@@ -1,4 +1,4 @@
-package com.kabasonic.notepad.ui;
+package com.kabasonic.notepad.ui.help;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

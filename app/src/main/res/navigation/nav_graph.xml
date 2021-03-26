@@ -6,7 +6,7 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.kabasonic.notepad.ui.HomeFragment"
+        android:name="com.kabasonic.notepad.ui.home.HomeFragment"
         android:label="@string/notes"
         tools:layout="@layout/fragment_home">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.kabasonic.notepad.ui.FavoriteFragment"
+        android:name="com.kabasonic.notepad.ui.favorite.FavoriteFragment"
         android:label="@string/favorite"
         tools:layout="@layout/fragment_favorite">
 
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/remindersFragment"
-        android:name="com.kabasonic.notepad.ui.RemindersFragment"
+        android:name="com.kabasonic.notepad.ui.reminder.RemindersFragment"
         android:label="@string/reminders"
         tools:layout="@layout/fragment_reminders">
 
@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/trashFragment"
-        android:name="com.kabasonic.notepad.ui.TrashFragment"
+        android:name="com.kabasonic.notepad.ui.trash.TrashFragment"
         android:label="@string/trash"
         tools:layout="@layout/fragment_trash">
 
@@ -44,7 +44,7 @@
 
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.kabasonic.notepad.ui.HelpFragment"
+        android:name="com.kabasonic.notepad.ui.help.HelpFragment"
         android:label="@string/support"
         tools:layout="@layout/fragment_help">
 
@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/noteFragment"
-        android:name="com.kabasonic.notepad.ui.NoteFragment"
+        android:name="com.kabasonic.notepad.ui.note.NoteFragment"
         android:label="@string/create_note"
         tools:layout="@layout/fragment_note">
         <argument

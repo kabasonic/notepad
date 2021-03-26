@@ -1,4 +1,4 @@
-package com.kabasonic.notepad.data;
+package com.kabasonic.notepad.data.db;
 
 
 import android.content.Context;
@@ -10,13 +10,18 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Note.class}, version = 5)
-//@TypeConverters({Converters.class})
+import com.kabasonic.notepad.data.dao.ImageDao;
+import com.kabasonic.notepad.data.dao.NoteDao;
+import com.kabasonic.notepad.data.model.Image;
+import com.kabasonic.notepad.data.model.Note;
+
+@Database(entities = {Note.class, Image.class}, version = 3)
 public abstract class NoteDatabase extends RoomDatabase {
 
     private static NoteDatabase instance;
 
     public abstract NoteDao noteDao();
+    public abstract ImageDao imageDao();
 
     public static synchronized NoteDatabase getInstance(Context context) {
         if (instance == null) {
@@ -40,17 +45,20 @@ public abstract class NoteDatabase extends RoomDatabase {
         }
     };
 
+
     private static class PopulateDbAsyncTask extends AsyncTask<Void,Void,Void>{
+
         private NoteDao noteDao;
+        private ImageDao imageDao;
+
         private PopulateDbAsyncTask(NoteDatabase noteDatabase){
             this.noteDao = noteDatabase.noteDao();
+            this.imageDao = noteDatabase.imageDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-//            noteDao.insert(new Note("Title 1","Body 1"));
-//            noteDao.insert(new Note("Title 2","Body 2"));
-//            noteDao.insert(new Note("Title 3","Body 3"));
+            //init elements
             return null;
         }
     }

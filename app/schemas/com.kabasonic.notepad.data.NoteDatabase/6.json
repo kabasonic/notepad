@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 5,
-    "identityHash": "c5522310673680df7c9a958419ed6a64",
+    "version": 6,
+    "identityHash": "706a168f142d7e49b9c1652c5782cd5d",
     "entities": [
       {
         "tableName": "note_table",
@@ -62,7 +62,7 @@
       },
       {
         "tableName": "image_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`image_id` INTEGER NOT NULL, `image_id_note` INTEGER NOT NULL, `image_uri` TEXT, PRIMARY KEY(`image_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`image_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `image_id_note` INTEGER NOT NULL, `image_uri` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -87,7 +87,7 @@
           "columnNames": [
             "image_id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -96,7 +96,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c5522310673680df7c9a958419ed6a64')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '706a168f142d7e49b9c1652c5782cd5d')"
     ]
   }
 }

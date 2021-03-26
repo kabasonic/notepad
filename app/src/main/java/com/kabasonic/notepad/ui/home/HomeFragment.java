@@ -1,5 +1,6 @@
-package com.kabasonic.notepad.ui;
+package com.kabasonic.notepad.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +12,6 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -20,12 +20,16 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.kabasonic.notepad.R;
-import com.kabasonic.notepad.data.Note;
-import com.kabasonic.notepad.data.NoteViewModel;
+import com.kabasonic.notepad.data.db.NoteWithImages;
+import com.kabasonic.notepad.data.model.Image;
+import com.kabasonic.notepad.data.model.Note;
 import com.kabasonic.notepad.ui.adapters.HomeFragmentAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 public class HomeFragment extends Fragment {
 
@@ -37,13 +41,19 @@ public class HomeFragment extends Fragment {
     private HomeFragmentAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
-    private NoteViewModel noteViewModel;
+    private HomeViewModel homeViewModel;
+    private Context mContext;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.mContext = context;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.clicked = false;
-
         view = inflater.inflate(R.layout.fragment_home, container, false);
         //Initialization animations for FABs
         initAnimElements();
@@ -51,33 +61,44 @@ public class HomeFragment extends Fragment {
         initViewElements(view);
         //set adapter
         setAdapter(view);
+
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
         fabListeners();
         getAllNotes();
-
-        noteViewModel.getAllId().observe(getViewLifecycleOwner(), listId -> {
-
-            for (Integer currentNoteId : listId){
-                Log.d("Home fragment ID:", String.valueOf(listId));
-                }
-
-        });
     }
 
     private void getAllNotes() {
-        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-        noteViewModel.getAllNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
-            @Override
-            public void onChanged(List<Note> notes) {
-                mAdapter.setDataAdapter(notes);
-            }
-        });
 
+        homeViewModel.getGetAllNotesWithImages().observe(getViewLifecycleOwner(), noteWithImages -> {
+            List<Note> noteList = new ArrayList<>();
+            List<List<Image>> imagesList = new ArrayList<List<Image>>();
+            Log.d("getNotes", "All notes: " + noteWithImages.size());
+            for (NoteWithImages itemObject : noteWithImages) {
+                noteList.add(itemObject.note);
+                imagesList.add(itemObject.imageList);
+                Log.d("getNotes", "Note id: " + itemObject.note.getId());
+                Log.d("getNotes", "Note title: " + itemObject.note.getTitle());
+                Log.d("getNotes", "Note body: " + itemObject.note.getBody());
+                Log.d("getNotes","###################################################");
+                Log.d("getNotes","Image size: " + itemObject.imageList.size());
+                for(Image item: itemObject.imageList){
+                    Log.d("getNotes", "# Image id: " + item.getId());
+                    Log.d("getNotes", "# Image idFhNote: " + item.getIdFkNote());
+                    Log.d("getNotes", "# Image Uri: " + item.getUri());
+                }
+            }
+
+            mAdapter.setDataAdapter(noteList, imagesList);
+            mAdapter.notifyDataSetChanged();
+        });
     }
 
     private void setAdapter(View view) {
@@ -105,9 +126,11 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                noteViewModel.delete(mAdapter.getNoteAt(viewHolder.getAdapterPosition()));
+                // remove with adapter and delete with BD
+                homeViewModel.deleteNoteWithImages(mAdapter.getNoteAt(viewHolder.getAdapterPosition()));
                 mAdapter.notifyItemRemoved(viewHolder.getLayoutPosition());
-                // delete with BD
+                Snackbar.make(view, "Note has been deleted", Snackbar.LENGTH_SHORT).show();
+
             }
         }).attachToRecyclerView(mRecyclerView);
     }

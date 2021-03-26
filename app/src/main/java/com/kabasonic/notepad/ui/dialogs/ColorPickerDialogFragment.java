@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.kabasonic.notepad.R;
-import com.kabasonic.notepad.ui.NoteFragment;
+import com.kabasonic.notepad.ui.note.NoteFragment;
 
 import java.util.Objects;
 
