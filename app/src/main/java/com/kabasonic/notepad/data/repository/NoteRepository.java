@@ -28,6 +28,25 @@ public class NoteRepository {
         new InsertNoteWithImagesAsyncTask(noteDao).execute(noteWithImages);
     }
 
+    public void deleteImageWithNote(Image image){
+        new DeleteImageWithNoteAsyncTask(imageDao).execute(image);
+    }
+
+    private static class DeleteImageWithNoteAsyncTask extends AsyncTask<Image, Void, Void>{
+
+        private ImageDao imageDao;
+
+        private DeleteImageWithNoteAsyncTask(ImageDao imageDao){
+            this.imageDao = imageDao;
+        }
+
+        @Override
+        protected Void doInBackground(Image... images) {
+            imageDao.deleteImageWithNote(images[0]);
+            return null;
+        }
+    }
+
     private static class InsertNoteWithImagesAsyncTask extends AsyncTask<NoteWithImages, Void, Void> {
         private NoteDao noteDao;
 
@@ -55,5 +74,6 @@ public class NoteRepository {
     public LiveData<NoteWithImages> getNoteWithImages(int idNote){
         return noteDao.getNoteWithImage(idNote);
     }
+
 
 }

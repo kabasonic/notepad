@@ -26,6 +26,9 @@ public interface ImageDao {
     @Query("DELETE FROM image_table")
     void deleteAllImages();
 
+    @Delete
+    void deleteImageWithNote(Image image);
+
     @Query("SELECT * FROM image_table")
     LiveData<List<Image>> getAllImages();
 

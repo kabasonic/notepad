@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.kabasonic.notepad.R;
+import com.kabasonic.notepad.data.model.Image;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
 
     private Context mContext;
     private List<String> mImageItems;
+    private List<Image> mImageList;
     private OnItemClickListener mListener;
 
 
@@ -74,6 +76,14 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
 
     public void setImagesToList(List<String> mImageList){
         this.mImageItems = mImageList;
+    }
+
+    public void setImageObjectToList(List<Image> imageList){
+        this.mImageList = imageList;
+    }
+
+    public Image getAtImageItem(int position){
+        return mImageList.get(position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

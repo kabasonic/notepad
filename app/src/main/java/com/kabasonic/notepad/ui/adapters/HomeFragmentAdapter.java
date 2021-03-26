@@ -59,6 +59,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
         holder.mTitle.setText(noteItem.getTitle());
         holder.mLinearLayout.setBackgroundColor(noteItem.getBackgroundColor());
 
+
         if(displayingBody()){
             holder.mBody.setText(noteItem.getBody());
             holder.mBody.setVisibility(View.VISIBLE);

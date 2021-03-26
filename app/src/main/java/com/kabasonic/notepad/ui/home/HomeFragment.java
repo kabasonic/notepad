@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -26,6 +27,7 @@ import com.kabasonic.notepad.data.db.NoteWithImages;
 import com.kabasonic.notepad.data.model.Image;
 import com.kabasonic.notepad.data.model.Note;
 import com.kabasonic.notepad.ui.adapters.HomeFragmentAdapter;
+import com.kabasonic.notepad.ui.note.NoteViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,8 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private Context mContext;
+
+    private NoteViewModel noteViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -70,7 +74,18 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
+        noteViewModel.getAllImages().observe(getViewLifecycleOwner(), new Observer<List<Image>>() {
+            @Override
+            public void onChanged(List<Image> images) {
+                for(Image item: images){
+                    Log.d("Image List","id " + item.getId());
+                    Log.d("Image List","fkNote " + item.getIdFkNote());
+                    Log.d("Image List","Uri " + item.getUri());
 
+                }
+            }
+        });
         fabListeners();
         getAllNotes();
     }

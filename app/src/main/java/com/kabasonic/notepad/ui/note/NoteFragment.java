@@ -150,6 +150,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 Uri imageUri = data.getData();
                 // Add to database image to database and update Adapter
                 mAdapter.addImageToList(imageUri.toString());
+                setVisibilityImages();
             }
             mAdapter.notifyDataSetChanged();
         }
@@ -235,6 +236,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                         .setPositiveButton("YES", (dialog, which) -> {
                             //Delete image with database
 
+                            noteViewModel.deleteNoteWithImages(mAdapter.getAtImageItem(position));
                             mAdapter.deleteImageItem(position);
                             mAdapter.notifyDataSetChanged();
                         })
@@ -269,6 +271,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
             this.currentNote = new Note();
             noteViewModel.getNoteWithImages(getFragmentArguments.getNoteId()).observe(getViewLifecycleOwner(), noteWithImages -> {
                List<String> imageList = new ArrayList<>();
+               List<Image> imageListObject = new ArrayList<>();
                 this.currentNote.setId(noteWithImages.note.getId());
                 this.currentNote.setTitle(noteWithImages.note.getTitle());
                 this.currentNote.setBody(noteWithImages.note.getBody());
@@ -276,8 +279,10 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 this.currentNote.setLastTimeUpdate(noteWithImages.note.getLastTimeUpdate());
                 for (int i=0;i<noteWithImages.imageList.size();i++) {
                     imageList.add(noteWithImages.imageList.get(i).getUri());
+                    imageListObject.add(noteWithImages.imageList.get(i));
                     Log.d("ImageList","item: " + imageList.get(i));
                 }
+                mAdapter.setImageObjectToList(imageListObject);
                 mAdapter.setImagesToList(imageList);
                 mAdapter.notifyDataSetChanged();
                 setVisibilityImages();
