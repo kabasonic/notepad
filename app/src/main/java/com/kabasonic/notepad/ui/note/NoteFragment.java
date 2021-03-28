@@ -109,6 +109,16 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
             case R.id.delete_note:
                 Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_LONG).show();
                 // Delete note
+                if (!getTitleView().isEmpty() || !getBodyView().isEmpty()) {
+                    //Update Note
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyy hh:mm");
+                    Date date = new Date(System.currentTimeMillis());
+                    Note note = getNoteValuesFromView();
+                    note.setId(getFragmentArguments.getNoteId());
+                    note.setDeletedAt(sdf.format(date));
+                    noteViewModel.updateNoteWithImages(new NoteWithImages(note,mAdapter.getImageList()));
+
+                }
                 NavDirections action = NoteFragmentDirections.actionNoteFragmentToHomeFragment();
                 Navigation.findNavController(view).navigate(action);
                 break;
@@ -182,12 +192,15 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 case R.id.nav_menu_3:
                     DialogFragment dialogFilePicker = new FilePickerDialogFragment(NoteFragment.this, getActivity());
                     dialogFilePicker.show(fm, "file_picker");
+                    // set reminder!!!
                     break;
                 case R.id.nav_menu_4:
                     Snackbar.make(view, "Currently under development.", Snackbar.LENGTH_LONG).show();
+                    this.currentNote.setList(true);
                     break;
                 case R.id.nav_menu_5:
                     Snackbar.make(view, "Note has been added to favorite.", Snackbar.LENGTH_LONG).show();
+                    this.currentNote.setFavorite(true);
                     break;
             }
             return true;
@@ -279,6 +292,10 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 this.currentNote.setBody(noteWithImages.note.getBody());
                 this.currentNote.setBackgroundColor(noteWithImages.note.getBackgroundColor());
                 this.currentNote.setLastTimeUpdate(noteWithImages.note.getLastTimeUpdate());
+                this.currentNote.setFavorite(false);
+                this.currentNote.setDeletedAt("");
+                this.currentNote.setReminderIsSet(0);
+                this.currentNote.setList(false);
 
                 mAdapter.setImageFromBD(noteWithImages.imageList);
                 mAdapter.notifyDataSetChanged();
@@ -295,14 +312,19 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         fieldBody.setText(this.currentNote.getBody());
         linearLayout.setBackgroundColor(this.currentNote.getBackgroundColor());
         lastChange.setText(getNoteCurrentDate(this.currentNote.getLastTimeUpdate()));
+
     }
 
     private Note getNoteValuesFromView() {
         return new Note(
                 fieldTitle.getText().toString(),
                 fieldBody.getText().toString(),
+                new Date().getTime(),
+                this.currentNote.isFavorite(),
+                this.currentNote.getReminderIsSet(),
+                this.currentNote.getDeletedAt(),
                 this.currentNote.getBackgroundColor(),
-                new Date().getTime()
+                this.currentNote.isList()
         );
     }
 
@@ -319,7 +341,6 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm dd/MM/yyyy");
         return "Last time update: " + dateFormat.format(date);
-
     }
 
     // interface methods

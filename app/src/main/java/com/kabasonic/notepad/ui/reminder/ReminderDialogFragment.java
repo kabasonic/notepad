@@ -40,6 +40,7 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
     SwitchMaterial switchReminder;
     MaterialButton btOkayReminder, btCancelReminder;
 
+    private long time;
     private FragmentManager fm;
 
     public interface OnClickReminderListener {
@@ -139,11 +140,15 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
                 Log.i("Time:", String.valueOf(timeReminder.getText()));
                 Log.i("Do not repeat:",dataSpinner[spinnerPosition]);
                 Log.i("Show text:", String.valueOf(stateSwitch));
+
                 mListener.dataListener(dateReminder.getText().toString(),timeReminder.getText().toString());
 
-                AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
-                alarmManagerBroadcastReceiver.setAlarm(context);
-                getDialog().dismiss();
+
+
+
+//                AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
+//                alarmManagerBroadcastReceiver.setAlarm(context);
+//                getDialog().dismiss();
 
                 break;
             case R.id.bt_cancel_reminder:
@@ -156,6 +161,7 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
     @SuppressLint("SetTextI18n")
     @Override
     public void time(int hour, int minute) {
+
         timeReminder.setText(hour + ":" + minute);
     }
 

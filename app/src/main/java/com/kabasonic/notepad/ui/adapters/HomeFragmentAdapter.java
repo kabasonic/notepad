@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.kabasonic.notepad.R;
+import com.kabasonic.notepad.data.db.NoteWithImages;
 import com.kabasonic.notepad.data.model.Image;
 import com.kabasonic.notepad.data.model.Note;
 
@@ -95,6 +96,9 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
         this.mImageList = imageList;
     }
 
+    public NoteWithImages getNoteWithImagesAt(int position){
+        return new NoteWithImages(mRowItem.get(position),mImageList.get(position));
+    }
 
     public Note getNoteAt(int position){
         return mRowItem.get(position);

@@ -32,9 +32,15 @@ public interface NoteDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateImages(List<Image> imageList);
 
+    // trash fragment
+    @Transaction
+    @Query("SELECT * FROM note_table WHERE deleted_at is not NULL")
+    LiveData<List<NoteWithImages>> getAllNotesWithImagesTrash();
+
+
     //home fragment
     @Transaction
-    @Query("SELECT * FROM note_table")
+    @Query("SELECT * FROM note_table WHERE deleted_at is NULL")
     LiveData<List<NoteWithImages>> getAllNotesWithImages();
 
     //note fragment

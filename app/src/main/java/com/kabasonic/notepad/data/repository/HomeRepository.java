@@ -18,11 +18,13 @@ public class HomeRepository {
 
     private LiveData<List<NoteWithImages>> allNotesWithImages;
 
+
     public HomeRepository(Application application){
         NoteDatabase database = NoteDatabase.getInstance(application);
         this.noteDao = database.noteDao();
 
         this.allNotesWithImages = noteDao.getAllNotesWithImages();
+
     }
 
     public void deleteNoteWithImages(Note note){

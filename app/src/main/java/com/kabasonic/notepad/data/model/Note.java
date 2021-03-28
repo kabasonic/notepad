@@ -25,21 +25,31 @@ public class Note {
     private boolean favorite;
 
     @ColumnInfo(name = "note_reminderIsSet")
-    private boolean reminderIsSet;
+    private long reminderIsSet;
+
+    @ColumnInfo(name = "deleted_at", defaultValue = "NULL")
+    private String deletedAt ;
 
     @ColumnInfo(name = "note_backgroundColor")
     private int backgroundColor = 0xffffff;
+
+    @ColumnInfo(name ="list")
+    private boolean list;
 
     @Ignore
     public Note(){
         //empty constructor
     }
 
-    public Note(String title, String body,  int backgroundColor, long lastTimeUpdate) {
+    public Note(String title, String body, long lastTimeUpdate, boolean favorite, long reminderIsSet, String deletedAt, int backgroundColor, boolean list) {
         this.title = title;
         this.body = body;
-        this.backgroundColor = backgroundColor;
         this.lastTimeUpdate = lastTimeUpdate;
+        this.favorite = favorite;
+        this.reminderIsSet = reminderIsSet;
+        this.deletedAt = deletedAt;
+        this.backgroundColor = backgroundColor;
+        this.list = list;
     }
 
     public int getId() {
@@ -82,11 +92,11 @@ public class Note {
         this.favorite = favorite;
     }
 
-    public boolean isReminderIsSet() {
+    public long getReminderIsSet() {
         return reminderIsSet;
     }
 
-    public void setReminderIsSet(boolean reminderIsSet) {
+    public void setReminderIsSet(long reminderIsSet) {
         this.reminderIsSet = reminderIsSet;
     }
 
@@ -97,5 +107,21 @@ public class Note {
 
     public void setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public String getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(String deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    public boolean isList() {
+        return list;
+    }
+
+    public void setList(boolean list) {
+        this.list = list;
     }
 }
