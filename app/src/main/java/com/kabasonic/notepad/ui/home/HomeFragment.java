@@ -2,7 +2,6 @@ package com.kabasonic.notepad.ui.home;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -27,7 +25,6 @@ import com.kabasonic.notepad.data.db.NoteWithImages;
 import com.kabasonic.notepad.data.model.Image;
 import com.kabasonic.notepad.data.model.Note;
 import com.kabasonic.notepad.ui.adapters.HomeFragmentAdapter;
-import com.kabasonic.notepad.ui.note.NoteViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +42,6 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private Context mContext;
-
-    private NoteViewModel noteViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -74,18 +69,6 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-        noteViewModel.getAllImages().observe(getViewLifecycleOwner(), new Observer<List<Image>>() {
-            @Override
-            public void onChanged(List<Image> images) {
-                for(Image item: images){
-                    Log.d("Image List","id " + item.getId());
-                    Log.d("Image List","fkNote " + item.getIdFkNote());
-                    Log.d("Image List","Uri " + item.getUri());
-
-                }
-            }
-        });
         fabListeners();
         getAllNotes();
     }
@@ -95,22 +78,10 @@ public class HomeFragment extends Fragment {
         homeViewModel.getGetAllNotesWithImages().observe(getViewLifecycleOwner(), noteWithImages -> {
             List<Note> noteList = new ArrayList<>();
             List<List<Image>> imagesList = new ArrayList<List<Image>>();
-            Log.d("getNotes", "All notes: " + noteWithImages.size());
             for (NoteWithImages itemObject : noteWithImages) {
                 noteList.add(itemObject.note);
                 imagesList.add(itemObject.imageList);
-                Log.d("getNotes", "Note id: " + itemObject.note.getId());
-                Log.d("getNotes", "Note title: " + itemObject.note.getTitle());
-                Log.d("getNotes", "Note body: " + itemObject.note.getBody());
-                Log.d("getNotes","###################################################");
-                Log.d("getNotes","Image size: " + itemObject.imageList.size());
-                for(Image item: itemObject.imageList){
-                    Log.d("getNotes", "# Image id: " + item.getId());
-                    Log.d("getNotes", "# Image idFhNote: " + item.getIdFkNote());
-                    Log.d("getNotes", "# Image Uri: " + item.getUri());
-                }
             }
-
             mAdapter.setDataAdapter(noteList, imagesList);
             mAdapter.notifyDataSetChanged();
         });
@@ -119,15 +90,14 @@ public class HomeFragment extends Fragment {
     private void setAdapter(View view) {
         mRecyclerView = view.findViewById(R.id.home_fragment_rv);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new HomeFragmentAdapter(getContext());
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        mAdapter = new HomeFragmentAdapter(mContext);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 1));
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new HomeFragmentAdapter.OnItemClickListener() {
             @Override
             public void onClickItemView(Note note) {
                 // Navigation!!!
-                Log.d("Id with adapter:", String.valueOf(note.getId()));
                 NavDirections action = HomeFragmentDirections.actionHomeFragmentToNoteFragment("", note.getId());
                 Navigation.findNavController(view).navigate(action);
             }
@@ -182,10 +152,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void initAnimElements() {
-        fromBottomAnim = AnimationUtils.loadAnimation(getContext(), R.anim.from_bottom_anim);
-        rotateCloseAnim = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_anim);
-        rotateOpenAnim = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_open_anim);
-        toBottomAnim = AnimationUtils.loadAnimation(getContext(), R.anim.to_bottom_anim);
+        fromBottomAnim = AnimationUtils.loadAnimation(mContext, R.anim.from_bottom_anim);
+        rotateCloseAnim = AnimationUtils.loadAnimation(mContext, R.anim.rotate_close_anim);
+        rotateOpenAnim = AnimationUtils.loadAnimation(mContext, R.anim.rotate_open_anim);
+        toBottomAnim = AnimationUtils.loadAnimation(mContext, R.anim.to_bottom_anim);
     }
 
     private void actionButtonClicked() {

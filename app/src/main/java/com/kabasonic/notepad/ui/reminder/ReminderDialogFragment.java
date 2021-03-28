@@ -69,7 +69,7 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_remembering_note, container);
+        return inflater.inflate(R.layout.dialog_fragment_remembering_note, container);
     }
 
     @Override
@@ -140,6 +140,9 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
                 Log.i("Do not repeat:",dataSpinner[spinnerPosition]);
                 Log.i("Show text:", String.valueOf(stateSwitch));
                 mListener.dataListener(dateReminder.getText().toString(),timeReminder.getText().toString());
+
+                AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
+                alarmManagerBroadcastReceiver.setAlarm(context);
                 getDialog().dismiss();
 
                 break;

@@ -26,6 +26,7 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
 
     public interface OnItemClickListener {
         void onItemClickDeleteImage(int position);
+
         void onItemClickPickImage(int position);
 
     }
@@ -52,8 +53,7 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //holder.mImage.setImageBitmap(mImageList.get(position));
-            Glide.with(mContext).load(mImageList.get(position).getUri()).into(holder.mImage);
+        Glide.with(mContext).load(mImageList.get(position).getUri()).into(holder.mImage);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
         else return mImageList.size();
     }
 
-    public void setImageFromBD(List<Image> imageList){
+    public void setImageFromBD(List<Image> imageList) {
         this.mImageList = imageList;
     }
 
@@ -71,11 +71,11 @@ public class ImageNoteFragmentAdapter extends RecyclerView.Adapter<ImageNoteFrag
         return mImageList;
     }
 
-    public void addImageToList(Image image){
+    public void addImageToList(Image image) {
         this.mImageList.add(image);
     }
 
-    public Image getAtImageItem(int position){
+    public Image getAtImageItem(int position) {
         return mImageList.get(position);
     }
 

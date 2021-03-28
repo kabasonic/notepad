@@ -15,7 +15,6 @@ import java.util.List;
 public class HomeViewModel extends AndroidViewModel {
 
     private HomeRepository homeRepository;
-
     private LiveData<List<NoteWithImages>> allNotesWithImages;
 
     public HomeViewModel(@NonNull Application application) {

@@ -60,7 +60,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
         holder.mLinearLayout.setBackgroundColor(noteItem.getBackgroundColor());
 
 
-        if(displayingBody()){
+        if(displayingBody() && mRowItem != null){
             holder.mBody.setText(noteItem.getBody());
             holder.mBody.setVisibility(View.VISIBLE);
         }else{
@@ -104,8 +104,9 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
     private boolean displayingBody(){
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getResources().getString(R.string.shared_preferences_notepad), MODE_PRIVATE);
         int modeDisplayText = (sharedPref.getInt(mContext.getResources().getString(R.string.saved_displaying_text_note), 0));
-        if(modeDisplayText == 1)
+        if(modeDisplayText == 1){
             return true;
+        }
         else
             return false;
     }

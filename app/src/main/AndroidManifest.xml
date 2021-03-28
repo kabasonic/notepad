@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +25,11 @@
         <activity android:name=".ui.onboarding.ScreenSlidePagerActivity">
 
         </activity>
+
+        <receiver android:name=".ui.reminder.AlarmManagerBroadcastReceiver">
+
+        </receiver>
+
     </application>
 
 </manifest>

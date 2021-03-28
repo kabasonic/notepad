@@ -37,6 +37,7 @@ import com.kabasonic.notepad.R;
 import com.kabasonic.notepad.data.db.NoteWithImages;
 import com.kabasonic.notepad.data.model.Image;
 import com.kabasonic.notepad.data.model.Note;
+import com.kabasonic.notepad.ui.reminder.AlarmManagerBroadcastReceiver;
 import com.kabasonic.notepad.ui.adapters.ImageNoteFragmentAdapter;
 import com.kabasonic.notepad.ui.dialogs.ColorPickerDialogFragment;
 import com.kabasonic.notepad.ui.dialogs.FilePickerDialogFragment;
@@ -128,7 +129,6 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 //Update Note
                 Note note = getNoteValuesFromView();
                 note.setId(getFragmentArguments.getNoteId());
-
                 noteViewModel.updateNoteWithImages(new NoteWithImages(note,mAdapter.getImageList()));
                 Snackbar.make(view, "Note updated.", Snackbar.LENGTH_SHORT).show();
             } else if (getTitleView().isEmpty() && getBodyView().isEmpty()) {
@@ -219,6 +219,8 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 .setMessage("Are you sure you want to delete the reminder time?")
                 .setPositiveButton("YES", (dialog, which) -> {
                     chipAlarm.setVisibility(View.GONE);
+                    AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
+                    alarmManagerBroadcastReceiver.cancelAlarm(mContext);
                     Snackbar.make(view, "Alarm reminder has been deleted.", Snackbar.LENGTH_LONG).show();
                 })
                 .setNegativeButton("NO", (dialog, which) -> {
@@ -343,8 +345,11 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     @Override
     public void dataListener(String date, String time) {
         String textAlarmChip = date + " " + time;
+        // Create system alarm
         chipAlarm.setText(textAlarmChip);
         chipAlarm.setVisibility(View.VISIBLE);
     }
+
+   
 }
 
