@@ -93,7 +93,7 @@ public class TrashFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 // remove with adapter and delete with BD
                 if(direction == ItemTouchHelper.RIGHT){
-
+                    trashViewModel.deleteNoteWithImagesTrash(mAdapter.getNoteAt(viewHolder.getAdapterPosition()));
                     Snackbar.make(view,"The note was deleted",Snackbar.LENGTH_SHORT).show();
                 }else if(direction == ItemTouchHelper.LEFT){
                     NoteWithImages noteWithImages = mAdapter.getNoteWithImagesAt(viewHolder.getAdapterPosition());

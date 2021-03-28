@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.kabasonic.notepad.data.db.NoteWithImages;
+import com.kabasonic.notepad.data.model.Note;
 import com.kabasonic.notepad.data.repository.TrashRepository;
 
 import java.util.List;
@@ -30,6 +31,10 @@ public class TrashViewModel extends AndroidViewModel {
 
     public void restoreNoteWithTrash(NoteWithImages noteWithImages){
         trashRepository.update(noteWithImages);
+    }
+
+    public void deleteNoteWithImagesTrash(Note note){
+        trashRepository.deleteNoteWithImages(note);
     }
 
 }
