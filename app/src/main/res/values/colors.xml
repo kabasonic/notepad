@@ -20,6 +20,17 @@
     <color name="colorLightGreen">#8BC34A</color>
     <color name="colorPurple">#9C27B0</color>
 
+    <color name="color_1">#f48fb1</color>
+    <color name="color_2">#b39ddb</color>
+    <color name="color_3">#90caf9</color>
+    <color name="color_4">#80deea</color>
+    <color name="color_5">#a5d6a7</color>
+    <color name="color_6">#e6ee9c</color>
+    <color name="color_7">#ffe082</color>
+    <color name="color_8">#ffab91</color>
+    <color name="color_9">#bcaaa4</color>
+    <color name="color_10">#FFFFFFFF</color>
+
 
 
 </resources>

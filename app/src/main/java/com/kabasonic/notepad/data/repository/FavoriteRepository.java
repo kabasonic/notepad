@@ -10,46 +10,28 @@ import com.kabasonic.notepad.data.dao.NoteDao;
 import com.kabasonic.notepad.data.db.NoteDatabase;
 import com.kabasonic.notepad.data.db.NoteWithImages;
 import com.kabasonic.notepad.data.model.Image;
-import com.kabasonic.notepad.data.model.Note;
 
 import java.util.List;
 
-public class HomeRepository {
+public class FavoriteRepository {
 
     private NoteDao noteDao;
     private ImageDao imageDao;
-    private LiveData<List<NoteWithImages>> allNotesWithImages;
 
+    LiveData<List<NoteWithImages>> allFavoriteNotesWithImages;
 
-    public HomeRepository(Application application){
+    public FavoriteRepository(Application application){
+
         NoteDatabase database = NoteDatabase.getInstance(application);
+
         this.noteDao = database.noteDao();
         this.imageDao = database.imageDao();
 
-        this.allNotesWithImages = noteDao.getAllNotesWithImages();
-
+        allFavoriteNotesWithImages = noteDao.getAllNotesWithImagesFavorite();
     }
 
-    public void deleteNoteWithImages(Note note){
-        new DeleteNoteByIdAsyncTask(noteDao,note.getId()).execute(note);
-    }
-
-    private class DeleteNoteByIdAsyncTask extends AsyncTask<Note,Void,Void>{
-
-        private NoteDao noteDao;
-        private int fkNote;
-
-        private DeleteNoteByIdAsyncTask(NoteDao noteDao,int fkNote){
-            this.noteDao = noteDao;
-            this.fkNote = fkNote;
-        }
-
-        @Override
-        protected Void doInBackground(Note... notes) {
-            noteDao.deleteNote(notes[0]);
-            noteDao.deleteImages(fkNote);
-            return null;
-        }
+    public LiveData<List<NoteWithImages>> getAllFavoriteNotesWithImages(){
+        return allFavoriteNotesWithImages;
     }
 
     public void update(NoteWithImages noteWithImages){
@@ -78,11 +60,6 @@ public class HomeRepository {
             }
             return null;
         }
-    }
-
-
-    public LiveData<List<NoteWithImages>> getAllNotesWithImages(){
-        return allNotesWithImages;
     }
 
 

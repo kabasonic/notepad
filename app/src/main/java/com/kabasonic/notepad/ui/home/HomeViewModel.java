@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.kabasonic.notepad.data.db.NoteWithImages;
 import com.kabasonic.notepad.data.model.Note;
@@ -16,6 +17,10 @@ public class HomeViewModel extends AndroidViewModel {
 
     private HomeRepository homeRepository;
     private LiveData<List<NoteWithImages>> allNotesWithImages;
+
+    private MutableLiveData<Integer> displayElements;
+    private MutableLiveData<Integer> displayContent;
+
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
@@ -33,7 +38,22 @@ public class HomeViewModel extends AndroidViewModel {
         return allNotesWithImages;
     }
 
+    public void updateNoteWithImages(NoteWithImages noteWithImages){
+        homeRepository.update(noteWithImages);
+    }
 
+    public MutableLiveData<Integer> getDisplayElements() {
+        if(displayElements == null){
+            displayElements = new MutableLiveData<>();
+        }
+        return displayElements;
+    }
 
+    public MutableLiveData<Integer> getDisplayContent(){
+        if(displayContent == null){
+            displayContent = new MutableLiveData<>();
+        }
+        return displayContent;
+    }
 
 }

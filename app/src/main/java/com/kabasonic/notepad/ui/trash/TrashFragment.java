@@ -82,6 +82,10 @@ public class TrashFragment extends Fragment {
             public void onClickItemView(Note note) {
                 Snackbar.make(view,"To view the note, you need to restore it. Swipe left to restore, right to delete.",Snackbar.LENGTH_LONG).show();
             }
+            @Override
+            public void onClickFavorite(boolean action, int position) {
+
+            }
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {

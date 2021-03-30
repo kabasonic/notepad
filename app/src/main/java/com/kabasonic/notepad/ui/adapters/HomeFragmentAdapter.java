@@ -1,7 +1,6 @@
 package com.kabasonic.notepad.ui.adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,16 +21,19 @@ import com.kabasonic.notepad.data.model.Note;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Note> mRowItem;
     private List<List<Image>> mImageList;
+    private Integer mDisplayContent;
+    private Integer mDisplayViewRow;
+
+
 
     public interface OnItemClickListener{
         void onClickItemView(Note note);
+        void onClickFavorite(boolean action, int position);
     }
 
     OnItemClickListener mListener;
@@ -60,19 +62,25 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
         holder.mTitle.setText(noteItem.getTitle());
         holder.mLinearLayout.setBackgroundColor(noteItem.getBackgroundColor());
 
-
-        if(displayingBody() && mRowItem != null){
+        if(this.mDisplayContent == 1 && mRowItem != null){
             holder.mBody.setText(noteItem.getBody());
             holder.mBody.setVisibility(View.VISIBLE);
+            holder.mBodyLayout.setVisibility(View.VISIBLE);
         }else{
             holder.mBodyLayout.setVisibility(View.GONE);
         }
 
-        if(mImageList.get(position).size() > 1){
+        if(mRowItem.get(position).isFavorite()){
+            holder.mFavorite.setAlpha((float) 1);
+        }else{
+            holder.mFavorite.setAlpha((float) 0.3);
+        }
+
+        if(mImageList.get(position).size() > 1 && mDisplayViewRow == 1){
                 holder.mImageLayout.setVisibility(View.VISIBLE);
                 holder.mBadgeImage.setText(String.valueOf(mImageList.get(position).size()));
                 Glide.with(mContext).load(mImageList.get(position).get(mImageList.get(position).size()-1).getUri()).into(holder.mImage);
-        } else if(mImageList.get(position).size() == 1){
+        } else if(mImageList.get(position).size() == 1 && mDisplayViewRow == 1){
             holder.mImageLayout.setVisibility(View.VISIBLE);
             holder.mBadgeImage.setVisibility(View.GONE);
             Glide.with(mContext).load(mImageList.get(position).get(0).getUri()).into(holder.mImage);
@@ -105,14 +113,12 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
 
     }
 
-    private boolean displayingBody(){
-        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getResources().getString(R.string.shared_preferences_notepad), MODE_PRIVATE);
-        int modeDisplayText = (sharedPref.getInt(mContext.getResources().getString(R.string.saved_displaying_text_note), 0));
-        if(modeDisplayText == 1){
-            return true;
-        }
-        else
-            return false;
+    public void displayingBody(Integer action){
+        this.mDisplayContent = action;
+    }
+
+    public void displayingView(Integer action){
+        this.mDisplayViewRow = action;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -124,7 +130,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
         public ImageView mImage;
         public FrameLayout mImageLayout;
         public LinearLayout mBodyLayout;
-
+        public ImageView mFavorite;
 
         public ViewHolder(@NonNull View itemView, final OnItemClickListener mListener) {
             super(itemView);
@@ -136,6 +142,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
             mImage = itemView.findViewById(R.id.image_row_home_fragment);
             mImageLayout = itemView.findViewById(R.id.layout_image_home_fragment);
             mBodyLayout = itemView.findViewById(R.id.body_layout);
+            mFavorite = itemView.findViewById(R.id.add_to_favorite);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -143,6 +150,15 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
                     mListener.onClickItemView(getNoteAt(getAdapterPosition()));
                 }
             });
+
+            mFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onClickFavorite(mRowItem.get(getAdapterPosition()).isFavorite(), getAdapterPosition());
+                }
+            });
+
+
 
 
         }

@@ -24,6 +24,13 @@
         android:label="@string/favorite"
         tools:layout="@layout/fragment_favorite">
 
+        <action
+            android:id="@+id/action_favoriteFragment_to_noteFragment"
+            app:destination="@id/noteFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -68,6 +75,13 @@
         <argument
             android:name="NoteId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_noteFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
 </navigation>

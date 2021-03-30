@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kabasonic.notepad.R;
 import com.kabasonic.notepad.ui.note.NoteFragment;
 
@@ -48,12 +49,16 @@ public class ColorPickerDialogFragment extends DialogFragment implements DialogI
     }
 
     private void initViewElements() {
-        View color1 = (View) view.findViewById(R.id.color_1);
-        View color2 = (View) view.findViewById(R.id.color_2);
-        View color3 = (View) view.findViewById(R.id.color_3);
-        View color4 = (View) view.findViewById(R.id.color_4);
-        View color5 = (View) view.findViewById(R.id.color_5);
-        View color6 = (View) view.findViewById(R.id.color_6);
+        FloatingActionButton color1 = (FloatingActionButton) view.findViewById(R.id.color_1);
+        FloatingActionButton color2 = (FloatingActionButton) view.findViewById(R.id.color_2);
+        FloatingActionButton color3 = (FloatingActionButton) view.findViewById(R.id.color_3);
+        FloatingActionButton color4 = (FloatingActionButton) view.findViewById(R.id.color_4);
+        FloatingActionButton color5 = (FloatingActionButton) view.findViewById(R.id.color_5);
+        FloatingActionButton color6 = (FloatingActionButton) view.findViewById(R.id.color_6);
+        FloatingActionButton color7 = (FloatingActionButton) view.findViewById(R.id.color_7);
+        FloatingActionButton color8 = (FloatingActionButton) view.findViewById(R.id.color_8);
+        FloatingActionButton color9 = (FloatingActionButton) view.findViewById(R.id.color_9);
+        FloatingActionButton color10 = (FloatingActionButton) view.findViewById(R.id.color_10);
 
         color1.setOnClickListener(this);
         color2.setOnClickListener(this);
@@ -61,6 +66,10 @@ public class ColorPickerDialogFragment extends DialogFragment implements DialogI
         color4.setOnClickListener(this);
         color5.setOnClickListener(this);
         color6.setOnClickListener(this);
+        color7.setOnClickListener(this);
+        color8.setOnClickListener(this);
+        color9.setOnClickListener(this);
+        color10.setOnClickListener(this);
     }
 
 
@@ -78,24 +87,37 @@ public class ColorPickerDialogFragment extends DialogFragment implements DialogI
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.color_1:
-                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorLightBlue));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.color_1));
                 break;
             case R.id.color_2:
-                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorLightGreen));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.color_2));
                 break;
             case R.id.color_3:
-                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorOrange));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.color_3));
                 break;
             case R.id.color_4:
-                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.color_4));
                 break;
             case R.id.color_5:
-                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorYellow));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.color_5));
                 break;
             case R.id.color_6:
-                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.colorPurple));
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.color_6));
+                break;
+            case R.id.color_7:
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.color_7));
+                break;
+            case R.id.color_8:
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.color_8));
+                break;
+            case R.id.color_9:
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.color_9));
+                break;
+            case R.id.color_10:
+                mListener.setSelectedColor(ContextCompat.getColor(getContext(), R.color.color_10));
                 break;
         }
+
         Objects.requireNonNull(getDialog()).dismiss();
     }
 

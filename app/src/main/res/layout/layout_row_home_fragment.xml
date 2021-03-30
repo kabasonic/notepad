@@ -23,16 +23,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-            <TextView
-                android:id="@+id/title_row_home"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:maxLines="2"
-                android:text="@string/lorem_ipsum"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/title_row_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:maxLines="2"
+                    android:text="@string/lorem_ipsum"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:id="@+id/add_to_favorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_twotone_favorite_24"
+                    android:backgroundTint="@color/colorRed"
+                    android:alpha="0.3"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="16dp"
+                    android:visibility="visible"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/body_layout"
@@ -95,7 +113,6 @@
                 </FrameLayout>
 
             </LinearLayout>
-
 
         </LinearLayout>
 

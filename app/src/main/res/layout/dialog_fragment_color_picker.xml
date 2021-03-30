@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center">
 
@@ -10,38 +10,64 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:padding="8dp">
 
-        <View
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/color_1"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/view_circle"
-            android:backgroundTint="@color/colorLightBlue"
-            android:layout_margin="16dp"
-            android:onClick="onClick"
+            android:backgroundTint="@color/color_1"
+            android:layout_margin="8dp"
+            app:fabSize="mini"
+            app:borderWidth="0dp"
             android:focusable="true"/>
 
-        <View
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/color_2"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/view_circle"
-            android:backgroundTint="@color/colorLightGreen"
-            android:layout_margin="16dp"
+            android:backgroundTint="@color/color_2"
+            android:layout_margin="8dp"
+            app:fabSize="mini"
+            app:borderWidth="0dp"
             android:focusable="true"/>
 
-        <View
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/color_3"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/view_circle"
-            android:backgroundTint="@color/colorOrange"
-            android:layout_margin="16dp"
+            android:backgroundTint="@color/color_3"
+            android:layout_margin="8dp"
+            app:fabSize="mini"
+            app:borderWidth="0dp"
             android:focusable="true"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/color_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_4"
+            android:layout_margin="8dp"
+            app:fabSize="mini"
+            app:borderWidth="0dp"
+            android:focusable="true"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/color_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_5"
+            android:layout_margin="8dp"
+            app:fabSize="mini"
+            app:borderWidth="0dp"
+            android:focusable="true"/>
+
 
     </LinearLayout>
 
@@ -50,36 +76,62 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:padding="8dp">
 
-        <View
-            android:id="@+id/color_4"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_weight="1"
-            android:background="@drawable/view_circle"
-            android:backgroundTint="@color/colorRed"
-            android:layout_margin="16dp"
-            android:focusable="true"/>
-
-        <View
-            android:id="@+id/color_5"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_weight="1"
-            android:background="@drawable/view_circle"
-            android:backgroundTint="@color/colorYellow"
-            android:layout_margin="16dp"
-            android:focusable="true"/>
-
-        <View
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/color_6"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/view_circle"
-            android:backgroundTint="@color/colorPurple"
-            android:layout_margin="16dp"
+            android:backgroundTint="@color/color_6"
+            android:layout_margin="8dp"
+            app:fabSize="mini"
+            app:borderWidth="0dp"
+            android:focusable="true"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/color_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_7"
+            android:layout_margin="8dp"
+            app:fabSize="mini"
+            app:borderWidth="0dp"
+            android:focusable="true"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/color_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_8"
+            android:layout_margin="8dp"
+            app:fabSize="mini"
+            app:borderWidth="0dp"
+            android:focusable="true"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/color_9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_9"
+            android:layout_margin="8dp"
+            app:fabSize="mini"
+            app:borderWidth="0dp"
+            android:focusable="true"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/color_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_10"
+            android:layout_margin="8dp"
+            app:fabSize="mini"
+            app:borderWidth="0dp"
             android:focusable="true"/>
 
     </LinearLayout>

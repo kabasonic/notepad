@@ -107,7 +107,6 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
             case R.id.share_note:
                 break;
             case R.id.delete_note:
-                Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_LONG).show();
                 // Delete note
                 if (!getTitleView().isEmpty() || !getBodyView().isEmpty()) {
                     //Update Note
@@ -117,7 +116,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                     note.setId(getFragmentArguments.getNoteId());
                     note.setDeletedAt(sdf.format(date));
                     noteViewModel.updateNoteWithImages(new NoteWithImages(note,mAdapter.getImageList()));
-
+                    Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_LONG).show();
                 }
                 NavDirections action = NoteFragmentDirections.actionNoteFragmentToHomeFragment();
                 Navigation.findNavController(view).navigate(action);
@@ -137,10 +136,12 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         } else if (getFragmentArguments.getNoteId() >= 0) {
             if (!getTitleView().isEmpty() || !getBodyView().isEmpty()) {
                 //Update Note
+
                 Note note = getNoteValuesFromView();
+                Log.d("FAVORITE UPDATE","Favorite is null? : " +  note.isFavorite());
                 note.setId(getFragmentArguments.getNoteId());
                 noteViewModel.updateNoteWithImages(new NoteWithImages(note,mAdapter.getImageList()));
-                Snackbar.make(view, "Note updated.", Snackbar.LENGTH_SHORT).show();
+                //Snackbar.make(view, "Note updated.", Snackbar.LENGTH_SHORT).show();
             } else if (getTitleView().isEmpty() && getBodyView().isEmpty()) {
                 //Delete note
                 Snackbar.make(view, "Empty note deleted.", Snackbar.LENGTH_SHORT).show();
@@ -292,10 +293,10 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 this.currentNote.setBody(noteWithImages.note.getBody());
                 this.currentNote.setBackgroundColor(noteWithImages.note.getBackgroundColor());
                 this.currentNote.setLastTimeUpdate(noteWithImages.note.getLastTimeUpdate());
-                this.currentNote.setFavorite(false);
-                this.currentNote.setDeletedAt("");
-                this.currentNote.setReminderIsSet(0);
-                this.currentNote.setList(false);
+                this.currentNote.setFavorite(noteWithImages.note.isFavorite());
+                this.currentNote.setDeletedAt(noteWithImages.note.getDeletedAt());
+                this.currentNote.setReminderIsSet(noteWithImages.note.getReminderIsSet());
+                this.currentNote.setList(noteWithImages.note.isList());
 
                 mAdapter.setImageFromBD(noteWithImages.imageList);
                 mAdapter.notifyDataSetChanged();

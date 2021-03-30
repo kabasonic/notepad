@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -20,12 +21,13 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.kabasonic.notepad.ui.home.HomeViewModel;
 import com.kabasonic.notepad.ui.onboarding.ScreenSlidePagerActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     AppBarConfiguration mAppBarConfiguration;
-
+    private HomeViewModel homeViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -55,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
     }
 
     @Override
@@ -66,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_preferences_notepad), MODE_PRIVATE);
         int modeDisplayView = (sharedPref.getInt(getResources().getString(R.string.saved_displaying_elements), 0));
         int modeDisplayText = (sharedPref.getInt(getResources().getString(R.string.saved_displaying_text_note), 0));
-        Log.d(getClass().getSimpleName(), "Status " + modeDisplayText);
+        homeViewModel.getDisplayElements().setValue(modeDisplayView);
+        homeViewModel.getDisplayContent().setValue(modeDisplayText);
         if (modeDisplayView == 2)
             menu.findItem(R.id.display_plate).setChecked(true);
         if (modeDisplayView == 1)
@@ -105,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.apply();
                 if (item.isChecked()) item.setChecked(false);
                 else item.setChecked(true);
+                homeViewModel.getDisplayElements().setValue(2);
                 break;
             case R.id.display_row:
                 Log.d("Menu", "Displaying elements: Row");
@@ -112,16 +118,19 @@ public class MainActivity extends AppCompatActivity {
                 editor.apply();
                 if (item.isChecked()) item.setChecked(false);
                 else item.setChecked(true);
+                homeViewModel.getDisplayElements().setValue(1);
                 break;
             case R.id.show_text_notes_on:
                 editor.putInt(getResources().getString(R.string.saved_displaying_text_note), 1);
                 editor.apply();
+                homeViewModel.getDisplayContent().setValue(1);
                 if (item.isChecked()) item.setChecked(false);
                 else item.setChecked(true);
                 break;
             case R.id.show_text_notes_off:
                 editor.putInt(getResources().getString(R.string.saved_displaying_text_note), 0);
                 editor.apply();
+                homeViewModel.getDisplayContent().setValue(0);
                 if (item.isChecked()) item.setChecked(false);
                 else item.setChecked(true);
                 break;
