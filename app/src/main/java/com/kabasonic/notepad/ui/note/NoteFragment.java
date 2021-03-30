@@ -349,6 +349,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     public void setSelectedColor(int color) {
         linearLayout.setBackgroundColor(color);
         this.currentNote.setBackgroundColor(color);
+        bottomNavigationView.setBackgroundColor(color);
     }
 
     @Override
