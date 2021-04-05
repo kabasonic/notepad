@@ -1,7 +1,10 @@
 package com.kabasonic.notepad.ui.trash;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +18,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.kabasonic.notepad.R;
 import com.kabasonic.notepad.data.db.NoteWithImages;
 import com.kabasonic.notepad.data.model.Image;
 import com.kabasonic.notepad.data.model.Note;
 import com.kabasonic.notepad.ui.adapters.HomeFragmentAdapter;
+import com.kabasonic.notepad.ui.home.HomeViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +37,8 @@ public class TrashFragment extends Fragment {
     private HomeFragmentAdapter mAdapter;
     private TrashViewModel trashViewModel;
     private View view;
+    private FloatingActionButton clearTrash;
+    private HomeViewModel homeViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -43,7 +50,10 @@ public class TrashFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         trashViewModel = new ViewModelProvider(this).get(TrashViewModel.class);
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+
         view = inflater.inflate(R.layout.fragment_trash,container,false);
+        clearTrash = (FloatingActionButton) view.findViewById(R.id.fab_clear_trash);
         recyclerView = view.findViewById(R.id.rv_trash_fragment);
         return view;
     }
@@ -53,6 +63,60 @@ public class TrashFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         buildRecyclerView();
         getAllNotes();
+
+        clearTrash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(mContext)
+                        .setTitle("Remove trash")
+                        .setMessage("This action cannot be undone, are you sure you want to empty the trash?")
+                        .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                trashViewModel.deleteAllNotesInsideTrash();
+                                mAdapter.notifyItemRangeRemoved(0,mAdapter.getItemCount()-1);
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alert.create().show();
+            }
+        });
+        getDisplayContent();
+        getDisplayElement();
+    }
+
+
+    private void getDisplayElement(){
+        homeViewModel.getDisplayElements().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                Log.d("HomeViewModel", "onChanged");
+                if(recyclerView != null && mAdapter != null && integer != null){
+
+                    recyclerView.setLayoutManager(new GridLayoutManager(mContext, integer));
+                    mAdapter.displayingView(integer);
+                    mAdapter.notifyDataSetChanged();
+                }
+
+            }
+        });
+    }
+
+    private void getDisplayContent(){
+        homeViewModel.getDisplayContent().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if(mAdapter!=null){
+                    mAdapter.displayingBody(integer);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     private void getAllNotes(){

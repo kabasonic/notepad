@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_create_note"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ScrollView
@@ -23,62 +23,119 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
                 android:paddingTop="16dp"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/alarm_chip"
+                style="@style/Widget.MaterialComponents.Chip.Entry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipIcon="@drawable/ic_round_alarm_on_24"
-                app:chipIconVisible="true"
-                style="@style/Widget.MaterialComponents.Chip.Entry"
-                android:layout_marginLeft="32dp"
                 android:layout_marginStart="32dp"
-                android:visibility="gone"/>
+                android:layout_marginLeft="32dp"
+                android:visibility="gone"
+                app:chipIcon="@drawable/ic_round_alarm_on_24"
+                app:chipIconVisible="true" />
 
             <EditText
                 android:id="@+id/edit_title_text_note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:background="@null"
-                android:paddingTop="8dp"
-                android:paddingBottom="16dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:textStyle="bold"
-                android:maxLines="2"
+                android:hint="Title"
                 android:maxLength="80"
-                android:hint="Title"/>
+                android:maxLines="2"
+                android:paddingLeft="32dp"
+                android:paddingTop="8dp"
+                android:paddingRight="32dp"
+                android:paddingBottom="16dp"
+                android:text=""
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edit_body_text_note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text=""
-                android:inputType="textMultiLine"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                tools:ignore="TextViewEdits"
                 android:background="@null"
                 android:gravity="top"
-                android:hint="Your text"/>
+                android:hint="Your text"
+                android:inputType="textMultiLine"
+                android:paddingLeft="32dp"
+                android:paddingTop="0dp"
+                android:paddingRight="32dp"
+                android:paddingBottom="0dp"
+                android:text=""
+                android:visibility="visible"
+                tools:ignore="TextViewEdits" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_task_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:stackFromEnd="true"/>
+
+
+
+            <LinearLayout
+                android:id="@+id/task_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/move_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_round_grid_view_24"
+                    app:tint="@color/black"
+                    android:layout_margin="8dp"/>
+
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/edit_text_row_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:hint="New Task"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    />
+            </androidx.core.widget.NestedScrollView>
+
+                <ImageButton
+                    android:id="@+id/add_row_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_round_add_task_24"
+                    android:backgroundTint="@color/colorLightGreen"
+                    android:layout_margin="8dp"/>
+
+            </LinearLayout>
+
+
+
 
             <TextView
                 android:id="@+id/last_change"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:gravity="right"
-                android:paddingTop="8dp"
-                android:paddingBottom="16dp"
                 android:paddingLeft="32dp"
+                android:paddingTop="8dp"
                 android:paddingRight="32dp"
-                android:textStyle="italic"
-                android:textColor="@color/black"/>
+                android:paddingBottom="16dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textStyle="italic" />
+
 
         </LinearLayout>
 
@@ -88,8 +145,8 @@
         android:id="@+id/bottom_navigation_create_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/bottom_navigation_menu"
         app:itemIconTint="@color/black"
-        app:labelVisibilityMode="unlabeled"/>
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </LinearLayout>

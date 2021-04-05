@@ -37,4 +37,7 @@ public class TrashViewModel extends AndroidViewModel {
         trashRepository.deleteNoteWithImages(note);
     }
 
+    public void deleteAllNotesInsideTrash(){
+        trashRepository.deleteAllNotesInsideTrash();
+    }
 }

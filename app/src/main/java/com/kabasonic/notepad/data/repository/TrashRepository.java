@@ -85,5 +85,23 @@ public class TrashRepository {
         }
     }
 
+    public void deleteAllNotesInsideTrash(){
+        new DeleteAllNotesInsideTrash(noteDao).execute();
+    }
+
+    private class DeleteAllNotesInsideTrash extends AsyncTask<Void, Void, Void>{
+        private NoteDao noteDao;
+
+        private DeleteAllNotesInsideTrash(NoteDao noteDao){
+            this.noteDao = noteDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            noteDao.deleteAllNotesInsideTrash();
+            return null;
+        }
+    }
 
 }

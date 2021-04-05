@@ -26,7 +26,7 @@
         <menu>
             <group android:checkableBehavior="none">
                 <item
-
+                    android:id="@+id/settingsActivity"
                     android:icon="@drawable/ic_round_settings_24"
                     android:title="@string/settings" />
 

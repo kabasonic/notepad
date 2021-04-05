@@ -1,5 +1,6 @@
 package com.kabasonic.notepad;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,8 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -21,13 +24,17 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.kabasonic.notepad.ui.help.HelpFragment;
 import com.kabasonic.notepad.ui.home.HomeViewModel;
 import com.kabasonic.notepad.ui.onboarding.ScreenSlidePagerActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     AppBarConfiguration mAppBarConfiguration;
     private HomeViewModel homeViewModel;
+    private DrawerLayout drawer;
+    private NavController navController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -36,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
         //Check and start on boarding fragments
         checkOnBoarding();
 
+
         Toolbar mToolbar = (Toolbar) findViewById(R.id.topAppBar);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
 
         setSupportActionBar(mToolbar);
         // Passing each menu ID as a set of Ids because each
@@ -52,13 +61,18 @@ public class MainActivity extends AppCompatActivity {
                 R.id.helpFragment)
                 .setDrawerLayout(drawer)
                 .build();
+
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
+        navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -68,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main_menu, menu);
 
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_preferences_notepad), MODE_PRIVATE);
-        int modeDisplayView = (sharedPref.getInt(getResources().getString(R.string.saved_displaying_elements), 0));
-        int modeDisplayText = (sharedPref.getInt(getResources().getString(R.string.saved_displaying_text_note), 0));
+        int modeDisplayView = (sharedPref.getInt(getResources().getString(R.string.saved_displaying_elements), 1));
+        int modeDisplayText = (sharedPref.getInt(getResources().getString(R.string.saved_displaying_text_note), 1));
         homeViewModel.getDisplayElements().setValue(modeDisplayView);
         homeViewModel.getDisplayContent().setValue(modeDisplayText);
         if (modeDisplayView == 2)
@@ -89,21 +103,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_preferences_notepad), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         switch (item.getItemId()) {
-            case R.id.sorted_personally:
-                Log.d("Menu", "Sorting: Personally");
-                if (item.isChecked()) item.setChecked(false);
-                else item.setChecked(true);
-                break;
-            case R.id.sorted_date:
-                Log.d("Menu", "Sorting: By date of change");
-                if (item.isChecked()) item.setChecked(false);
-                else item.setChecked(true);
-                break;
-            case R.id.sorted_title:
-                Log.d("Menu", "Sorting: By title");
-                if (item.isChecked()) item.setChecked(false);
-                else item.setChecked(true);
-                break;
             case R.id.display_plate:
                 Log.d("Menu", "Displaying elements: Plate");
                 editor.putInt(getResources().getString(R.string.saved_displaying_elements), 2);
@@ -141,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        
+
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
@@ -153,5 +152,26 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ScreenSlidePagerActivity.class);
             startActivity(intent);
         }
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.helpFragment:
+                HelpFragment bottomSheet = new HelpFragment();
+                bottomSheet.show(getSupportFragmentManager(), "helpBottomSheet");
+                return true;
+            case R.id.settingsActivity:
+                startActivity(new Intent(this,SettingsActivity.class));
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                return true;
+            default:
+                NavigationUI.onNavDestinationSelected(item, navController);
+                //This is for closing the drawer after acting on it
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+        }
+
     }
 }

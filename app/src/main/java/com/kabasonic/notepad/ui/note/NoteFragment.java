@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -35,16 +38,25 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.kabasonic.notepad.R;
 import com.kabasonic.notepad.data.db.NoteWithImages;
+import com.kabasonic.notepad.data.db.NoteWithTasks;
 import com.kabasonic.notepad.data.model.Image;
 import com.kabasonic.notepad.data.model.Note;
-import com.kabasonic.notepad.ui.reminder.AlarmManagerBroadcastReceiver;
+import com.kabasonic.notepad.data.model.Task;
 import com.kabasonic.notepad.ui.adapters.ImageNoteFragmentAdapter;
+import com.kabasonic.notepad.ui.adapters.TaskAdapter;
 import com.kabasonic.notepad.ui.dialogs.ColorPickerDialogFragment;
 import com.kabasonic.notepad.ui.dialogs.FilePickerDialogFragment;
+import com.kabasonic.notepad.ui.reminder.AlarmManagerBroadcastReceiver;
 import com.kabasonic.notepad.ui.reminder.ReminderDialogFragment;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class NoteFragment extends Fragment implements ColorPickerDialogFragment.OnClickColorPickerListener, FilePickerDialogFragment.OnClickFilePickerListener, ReminderDialogFragment.OnClickReminderListener {
 
@@ -62,9 +74,17 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     private Chip chipAlarm;
     private TextView lastChange;
 
+    private RecyclerView mTaskRecyclerView;
+    private TaskAdapter mTaskAdapter;
+    private EditText fieldTask;
+    private ImageButton addTaskToList;
+    private List<Task> taskList = new ArrayList<>();
+    private LinearLayout taskLayout;
+
     private NoteFragmentArgs getFragmentArguments;
     private NoteViewModel noteViewModel;
     private Note currentNote;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -82,6 +102,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         setViewElements();
         setHasOptionsMenu(true);
         setIncomingArguments();
+
         return view;
     }
 
@@ -90,8 +111,13 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         super.onViewCreated(view, savedInstanceState);
         setChipAlarmListener();
         setBottomNavigationListener();
-        buildAdapterForImages(view);
+        buildAdapterForImages();
+        buildTaskListAdapter();
+        addNewTask();
+
+
     }
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -115,7 +141,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                     Note note = getNoteValuesFromView();
                     note.setId(getFragmentArguments.getNoteId());
                     note.setDeletedAt(sdf.format(date));
-                    noteViewModel.updateNoteWithImages(new NoteWithImages(note,mAdapter.getImageList()));
+                    noteViewModel.updateNoteWithImages(new NoteWithImages(note, mAdapter.getImageList()));
                     Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_LONG).show();
                 }
                 NavDirections action = NoteFragmentDirections.actionNoteFragmentToHomeFragment();
@@ -131,16 +157,39 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     public void onDestroyView() {
         if (getFragmentArguments.getNoteId() == -1 && (!getTitleView().isEmpty() || !getBodyView().isEmpty())) {
             //Insert Note
-            noteViewModel.insertNoteWithImages(new NoteWithImages(getNoteValuesFromView(), mAdapter.getImageList()));
+            noteViewModel.insertNoteWithImages(new NoteWithImages(getNoteValuesFromView(), mAdapter.getImageList()) );
+
+//            for(Task task: mTaskAdapter.getmItemList()){
+//                Log.d("Write Task","completed: " + task.isCompletedTask());
+//                Log.d("Write Task","body: " + task.getBody());
+//
+//            }
+
+            if(this.currentNote.isList()){
+                noteViewModel.insertNoteWithTask(new NoteWithTasks(getNoteValuesFromView(),mTaskAdapter.getmItemList()));
+            }
+
             Snackbar.make(view, "Note saved.", Snackbar.LENGTH_SHORT).show();
         } else if (getFragmentArguments.getNoteId() >= 0) {
             if (!getTitleView().isEmpty() || !getBodyView().isEmpty()) {
                 //Update Note
 
                 Note note = getNoteValuesFromView();
-                Log.d("FAVORITE UPDATE","Favorite is null? : " +  note.isFavorite());
+                Log.d("FAVORITE UPDATE", "Favorite is null? : " + note.isFavorite());
                 note.setId(getFragmentArguments.getNoteId());
-                noteViewModel.updateNoteWithImages(new NoteWithImages(note,mAdapter.getImageList()));
+                noteViewModel.updateNoteWithImages(new NoteWithImages(note, mAdapter.getImageList()));
+                if(this.currentNote.isList()){
+
+                    for(Task task: mTaskAdapter.getmItemList()){
+
+                        Log.d("Update Task","id: " + task.getId());
+                        Log.d("Update Task","body: " + task.getBody());
+                        Log.d("Update Task","fk: " + task.getIdFkNoteTask());
+                        Log.d("Update Task","completed: " + task.isCompletedTask());
+
+                    }
+                    noteViewModel.updateTask(new NoteWithTasks(note, mTaskAdapter.getmItemList()));
+                }
                 //Snackbar.make(view, "Note updated.", Snackbar.LENGTH_SHORT).show();
             } else if (getTitleView().isEmpty() && getBodyView().isEmpty()) {
                 //Delete note
@@ -156,9 +205,16 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         if (data != null) {
             if (requestCode == CAMERA_PICK_CODE && resultCode == Activity.RESULT_OK) {
                 Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+
                 //mAdapter.addImageToList(selectedImage);
                 //Add image to database and update Adapter
                 //Need save image because we not have uri with camera
+//                Uri imageUri = data.getData();
+//                Log.d("URI","URI IMAGE: " + imageUri.toString());
+                //saveImage(selectedImage);
+                mAdapter.addImageToList(new Image(saveImage(selectedImage)));
+                setVisibilityImages();
+                mAdapter.notifyDataSetChanged();
             } else if (requestCode == STORAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 // Add to database image to database and update Adapter
@@ -170,12 +226,18 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     }
 
     private void setViewElements() {
+        mRecyclerView = view.findViewById(R.id.note_image_rv);
         bottomNavigationView = view.findViewById(R.id.bottom_navigation_create_note);
         linearLayout = view.findViewById(R.id.layout_create_note);
         fieldBody = view.findViewById(R.id.edit_body_text_note);
         fieldTitle = view.findViewById(R.id.edit_title_text_note);
         chipAlarm = view.findViewById(R.id.alarm_chip);
         lastChange = view.findViewById(R.id.last_change);
+
+        mTaskRecyclerView = view.findViewById(R.id.rv_task_note);
+        fieldTask = view.findViewById(R.id.edit_text_row_task);
+        addTaskToList = view.findViewById(R.id.add_row_task);
+        taskLayout = view.findViewById(R.id.task_layout);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -196,8 +258,31 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                     // set reminder!!!
                     break;
                 case R.id.nav_menu_4:
-                    Snackbar.make(view, "Currently under development.", Snackbar.LENGTH_LONG).show();
-                    this.currentNote.setList(true);
+                    if (this.currentNote.isList()) {
+                        Snackbar.make(view, "Converted to note.", Snackbar.LENGTH_SHORT).show();
+                        for (Task items : mTaskAdapter.getmItemList()) {
+                            Log.d("List", "items: " + items.getBody());
+                        }
+                        mTaskRecyclerView.setVisibility(View.GONE);
+                        taskLayout.setVisibility(View.GONE);
+                        fieldBody.setVisibility(View.VISIBLE);
+
+                        noteViewModel.deleteListTasks(new NoteWithTasks(getNoteValuesFromView(),mTaskAdapter.getmItemList()));
+
+                        this.currentNote.setList(false);
+                        this.currentNote.setBody(mTaskAdapter.getListToString());
+                        this.fieldBody.setText(this.currentNote.getBody());
+                    } else {
+                        Snackbar snack = Snackbar.make(view, "Converted to list.", Snackbar.LENGTH_SHORT);
+
+                        mTaskAdapter.setmItemList(findNewLine(fieldBody.getText().toString()));
+                        mTaskAdapter.notifyDataSetChanged();
+                        mTaskRecyclerView.setVisibility(View.VISIBLE);
+                        taskLayout.setVisibility(View.VISIBLE);
+                        fieldBody.setVisibility(View.GONE);
+                        this.currentNote.setList(true);
+                    }
+
                     break;
                 case R.id.nav_menu_5:
                     Snackbar.make(view, "Note has been added to favorite.", Snackbar.LENGTH_LONG).show();
@@ -208,8 +293,56 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         });
     }
 
-    private void buildAdapterForImages(View view) {
-        mRecyclerView = view.findViewById(R.id.note_image_rv);
+    private void addNewTask() {
+        addTaskToList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                taskList.add(new Task(fieldTask.getText().toString(), false));
+                mTaskAdapter.setmItemList(taskList);
+                mTaskRecyclerView.scrollToPosition(mTaskRecyclerView.getAdapter().getItemCount() - 1);
+                mTaskAdapter.notifyDataSetChanged();
+                fieldTask.setText("");
+            }
+        });
+    }
+
+    private void buildTaskListAdapter() {
+        mTaskRecyclerView.setHasFixedSize(false);
+        mTaskAdapter = new TaskAdapter(mContext);
+        mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        mTaskRecyclerView.setAdapter(mTaskAdapter);
+
+        mTaskAdapter.setOnItemClickListener(new TaskAdapter.OnClickListener() {
+            @Override
+            public void removeTask(int position) {
+                mTaskAdapter.removeTaskWithList(position);
+                mTaskAdapter.notifyItemRemoved(position);
+            }
+
+            @Override
+            public void fieldTask(int position, String changedText) {
+
+                List<Task> list = mTaskAdapter.getmItemList();
+                list.set(position, new Task(changedText, list.get(position).isCompletedTask()));
+                Log.d("Debug", "Put to adapter text: " + fieldTask.getText().toString());
+                mTaskAdapter.setmItemList(list);
+                mTaskAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void checkBoxTask(int position, boolean isChecked) {
+                List<Task> list = mTaskAdapter.getmItemList();
+                Task task = list.get(position);
+                task.setId(list.get(position).getId());
+                task.setCompletedTask(isChecked);
+                list.set(position, task);
+                mTaskAdapter.setmItemList(list);
+                mTaskAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void buildAdapterForImages() {
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         mAdapter = new ImageNoteFragmentAdapter(mContext);
@@ -302,9 +435,36 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 mAdapter.notifyDataSetChanged();
                 setVisibilityImages();
                 setValuesToView();
+
+                if (this.currentNote.isList()) {
+                    noteViewModel.getNoteWithTasks(getFragmentArguments.getNoteId()).observe(getViewLifecycleOwner(), new Observer<NoteWithTasks>() {
+                        @Override
+                        public void onChanged(NoteWithTasks noteWithTasks) {
+                            Log.d("Incoming task", "list task SIZE: " + noteWithTasks.taskList.size());
+                            for(Task task: noteWithTasks.taskList){
+                                Log.d("Incoming task", "id: " + task.getId());
+                                Log.d("Incoming task", "fkNote: " + task.getIdFkNoteTask());
+                                Log.d("Incoming task", "body: " + task.getBody());
+                                Log.d("Incoming task", "checkbox: " + task.isCompletedTask());
+                            }
+                            mTaskAdapter.setmItemList(noteWithTasks.taskList);
+                            mTaskAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+//                    mTaskAdapter.setmItemList(findNewLine(fieldBody.getText().toString()));
+//                    mTaskAdapter.notifyDataSetChanged();
+                    mTaskRecyclerView.setVisibility(View.VISIBLE);
+                    taskLayout.setVisibility(View.VISIBLE);
+                    fieldBody.setVisibility(View.GONE);
+                    this.currentNote.setList(true);
+                }
+
             });
         } else {
             this.currentNote = new Note();
+            taskLayout.setVisibility(View.GONE);
+            mTaskRecyclerView.setVisibility(View.GONE);
         }
     }
 
@@ -314,6 +474,28 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         linearLayout.setBackgroundColor(this.currentNote.getBackgroundColor());
         lastChange.setText(getNoteCurrentDate(this.currentNote.getLastTimeUpdate()));
 
+    }
+
+    private List<Task> findNewLine(String inputString) {
+        this.taskList.clear();
+        inputString += "\n";
+        if (inputString.equals("\n")) {
+            return taskList;
+        } else {
+            char[] chars = inputString.toCharArray();
+            String output = "";
+            for (int i = 0; i < chars.length; i++) {
+                if ((int) chars[i] != 10) {
+                    output += chars[i];
+                } else if ((int) chars[i] == 10) {
+                    if (!output.equals("")) {
+                        this.taskList.add(new Task(output, false));
+                    }
+                    output = "";
+                }
+            }
+        }
+        return taskList;
     }
 
     private Note getNoteValuesFromView() {
@@ -357,7 +539,10 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         Intent intent;
         if (key == 0) {
             intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+
             startActivityForResult(intent, CAMERA_PICK_CODE);
+
         } else if (key == 1) {
             intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
@@ -373,6 +558,35 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         chipAlarm.setVisibility(View.VISIBLE);
     }
 
-   
+    private String saveImage(Bitmap bitmap) {
+
+        FileOutputStream outStream = null;
+        File sdCard = Environment.getExternalStorageDirectory();
+        File dir = new File(sdCard.getAbsolutePath() + "/" + R.string.app_name);
+        dir.mkdirs();
+        String fileName = String.format("%d.jpg", System.currentTimeMillis());
+        File outFile = new File(dir, fileName);
+        try {
+            outStream = new FileOutputStream(outFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+        try {
+            outStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            outStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File path = new File(dir+"/"+fileName);
+        return path.getPath();
+    }
+
+
 }
 

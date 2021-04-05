@@ -1,0 +1,59 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="General"
+        app:icon="@drawable/ic_round_settings_24">
+
+        <ListPreference
+            app:defaultValue="reply"
+            app:entries="@array/language_entries"
+            app:entryValues="@array/language_values"
+            app:key="language"
+            app:title="Languages"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="Orange"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_values"
+            app:key="theme"
+            app:title="Themes"
+            app:useSimpleSummaryProvider="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Styles"
+        app:icon="@drawable/ic_round_palette_24">
+
+        <ListPreference
+            app:defaultValue="Basic"
+            app:entries="@array/font_entries"
+            app:entryValues="@array/font_values"
+            app:key="font"
+            app:title="Text fonts"
+            app:useSimpleSummaryProvider="true"/>
+
+        <ListPreference
+            app:defaultValue="14"
+            app:entries="@array/size_text_entries"
+            app:entryValues="@array/size_text_values"
+            app:key="text_size"
+            app:title="Text size"
+            app:useSimpleSummaryProvider="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:icon="@drawable/ic_round_info_24"
+        app:title="About application">
+
+        <Preference
+            app:summary="Pavlo Lysytsia"
+            app:title="Author" />
+
+        <Preference
+            app:summary="1.0.0"
+            app:title="Version" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -2,6 +2,7 @@ package com.kabasonic.notepad.data.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -9,7 +10,9 @@ import com.kabasonic.notepad.data.dao.ImageDao;
 import com.kabasonic.notepad.data.dao.NoteDao;
 import com.kabasonic.notepad.data.db.NoteDatabase;
 import com.kabasonic.notepad.data.db.NoteWithImages;
+import com.kabasonic.notepad.data.db.NoteWithTasks;
 import com.kabasonic.notepad.data.model.Image;
+import com.kabasonic.notepad.data.model.Task;
 
 import java.util.List;
 
@@ -17,6 +20,8 @@ public class NoteRepository {
 
     private NoteDao noteDao;
     private ImageDao imageDao;
+
+    private long id;
 
     public NoteRepository(Application application) {
         NoteDatabase database = NoteDatabase.getInstance(application);
@@ -87,6 +92,7 @@ public class NoteRepository {
 
             long identifier = noteDao.insertNote(noteWithImages[0].note);
 
+            Log.d("NoteRepository","note identifier id: " + identifier);
             for (Image image: noteWithImages[0].imageList) {
                 image.setIdFkNote(identifier);
             }
@@ -103,5 +109,89 @@ public class NoteRepository {
         return noteDao.getNoteWithImages(idNote);
     }
 
+
+
+    public LiveData<NoteWithTasks> getNoteWithTasks(int noteId){
+        return noteDao.getNoteWithTasks(noteId);
+    }
+
+    public void insertTasks(NoteWithTasks noteWithTasks) {
+        new InsertNoteWithTasksAsyncTask(noteDao).execute(noteWithTasks);
+    }
+
+    private static class InsertNoteWithTasksAsyncTask extends AsyncTask<NoteWithTasks, Void, Void> {
+        private NoteDao noteDao;
+
+        private InsertNoteWithTasksAsyncTask(NoteDao noteDao) {
+            this.noteDao = noteDao;
+        }
+
+        @Override
+        protected Void doInBackground(NoteWithTasks... noteWithTasks) {
+
+            Log.d("NoteRepository","note id: " + noteDao.getLastId());
+            for (Task task: noteWithTasks[0].taskList) {
+                if(task.getId() == 0 && task.getIdFkNoteTask() == 0){
+                    task.setIdFkNoteTask(noteDao.getLastId());
+                    noteDao.insertTaskToNote(task);
+                }
+
+            }
+            return null;
+        }
+    }
+
+    public void updateTasks(NoteWithTasks noteWithTasks){
+        new UpdateNoteWithTasksAsyncTask(noteDao).execute(noteWithTasks);
+    }
+
+    private static class UpdateNoteWithTasksAsyncTask extends AsyncTask<NoteWithTasks,Void,Void>{
+        private NoteDao noteDao;
+
+
+        private UpdateNoteWithTasksAsyncTask(NoteDao noteDao){
+            this.noteDao = noteDao;
+
+        }
+
+        @Override
+        protected Void doInBackground(NoteWithTasks... noteWithTasks) {
+
+            noteDao.updateNote(noteWithTasks[0].note);
+            Task taskObject = new Task();
+            for(Task task: noteWithTasks[0].taskList){
+                if(task.getIdFkNoteTask() == 0){
+                    task.setIdFkNoteTask(noteWithTasks[0].note.getId());
+                    noteDao.insertTaskToNote(task);
+                }else{
+                    Log.d("TaskUpdate","task id: " + task.getId());
+                    noteDao.updateTask(task);
+                }
+            }
+            return null;
+        }
+    }
+
+    public void deleteListTasks(NoteWithTasks noteWithTasks) {
+        new DeleteTaskAsyncTask(noteDao).execute(noteWithTasks);
+    }
+
+    private static class DeleteTaskAsyncTask extends AsyncTask< NoteWithTasks,Void,Void>{
+        private NoteDao noteDao;
+
+        private DeleteTaskAsyncTask(NoteDao noteDao){
+            this.noteDao = noteDao;
+        }
+
+        @Override
+        protected Void doInBackground(NoteWithTasks... noteWithTasks) {
+            for (Task task: noteWithTasks[0].taskList){
+                if(task.getId() != 0 && task.getIdFkNoteTask() != 0)
+                noteDao.deleteTask(task);
+            }
+
+            return null;
+        }
+    }
 
 }

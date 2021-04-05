@@ -14,8 +14,9 @@ import com.kabasonic.notepad.data.dao.ImageDao;
 import com.kabasonic.notepad.data.dao.NoteDao;
 import com.kabasonic.notepad.data.model.Image;
 import com.kabasonic.notepad.data.model.Note;
+import com.kabasonic.notepad.data.model.Task;
 
-@Database(entities = {Note.class, Image.class}, version = 4)
+@Database(entities = {Note.class, Image.class, Task.class}, version = 6)
 public abstract class NoteDatabase extends RoomDatabase {
 
     private static NoteDatabase instance;

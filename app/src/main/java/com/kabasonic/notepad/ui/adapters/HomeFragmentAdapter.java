@@ -26,8 +26,8 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
     private Context mContext;
     private List<Note> mRowItem;
     private List<List<Image>> mImageList;
-    private Integer mDisplayContent;
-    private Integer mDisplayViewRow;
+    private Integer mDisplayContent = 1;
+    private Integer mDisplayViewRow = 1;
 
 
 
@@ -62,7 +62,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
         holder.mTitle.setText(noteItem.getTitle());
         holder.mLinearLayout.setBackgroundColor(noteItem.getBackgroundColor());
 
-        if(this.mDisplayContent == 1 && mRowItem != null){
+        if(this.mDisplayContent != null && this.mDisplayContent == 1 && mRowItem != null){
             holder.mBody.setText(noteItem.getBody());
             holder.mBody.setVisibility(View.VISIBLE);
             holder.mBodyLayout.setVisibility(View.VISIBLE);
@@ -76,11 +76,11 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
             holder.mFavorite.setAlpha((float) 0.3);
         }
 
-        if(mImageList.get(position).size() > 1 && mDisplayViewRow == 1){
+        if(mImageList.get(position).size() > 1 && this.mDisplayViewRow != null && this.mDisplayViewRow == 1){
                 holder.mImageLayout.setVisibility(View.VISIBLE);
                 holder.mBadgeImage.setText(String.valueOf(mImageList.get(position).size()));
                 Glide.with(mContext).load(mImageList.get(position).get(mImageList.get(position).size()-1).getUri()).into(holder.mImage);
-        } else if(mImageList.get(position).size() == 1 && mDisplayViewRow == 1){
+        } else if(mImageList.get(position).size() == 1 && this.mDisplayViewRow != null  && mDisplayViewRow == 1){
             holder.mImageLayout.setVisibility(View.VISIBLE);
             holder.mBadgeImage.setVisibility(View.GONE);
             Glide.with(mContext).load(mImageList.get(position).get(0).getUri()).into(holder.mImage);

@@ -29,7 +29,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="delete">Delete</string>
     <string name="change_color_background">Change color background</string>
     <string name="create_note">Create note</string>
-<!--    Type note key-->
+    <!--    Type note key-->
     <string name="note_key">note_key</string>
     <string name="note_key_remembering">note_key_remembering</string>
     <string name="add_a_remember">Add a remember</string>
@@ -58,4 +58,22 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
         <item>Every month</item>
         <item>Every year</item>
     </array>
+    <string name="title_activity_settings_fragment">SettingsActivityFragment</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="choose_email_client">Choose email client</string>
 </resources>

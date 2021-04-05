@@ -2,6 +2,7 @@ package com.kabasonic.notepad.ui.favorite;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.kabasonic.notepad.data.db.NoteWithImages;
 import com.kabasonic.notepad.data.model.Image;
 import com.kabasonic.notepad.data.model.Note;
 import com.kabasonic.notepad.ui.adapters.HomeFragmentAdapter;
+import com.kabasonic.notepad.ui.home.HomeViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class FavoriteFragment extends Fragment {
     private RecyclerView recyclerView;
     private HomeFragmentAdapter mAdapter;
     private FavoriteViewModel favoriteViewModel;
-
+    private HomeViewModel homeViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -48,6 +50,7 @@ public class FavoriteFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         favoriteViewModel = new ViewModelProvider(this).get(FavoriteViewModel.class);
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         view = inflater.inflate(R.layout.fragment_favorite,container,false);
         recyclerView = view.findViewById(R.id.rv_favorite_fragment);
         return view;
@@ -58,6 +61,37 @@ public class FavoriteFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         buildRecyclerView();
         getAllFavoriteNotesWithImages();
+
+        getDisplayElement();
+        getDisplayContent();
+    }
+
+    private void getDisplayElement(){
+        homeViewModel.getDisplayElements().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                Log.d("HomeViewModel", "onChanged");
+                if(recyclerView != null && mAdapter != null && integer != null){
+                    Log.d("DISPLAY ELEMNTS","HERE");
+                    recyclerView.setLayoutManager(new GridLayoutManager(mContext, integer));
+                    mAdapter.displayingView(integer);
+                    mAdapter.notifyDataSetChanged();
+                }
+
+            }
+        });
+    }
+
+    private void getDisplayContent(){
+        homeViewModel.getDisplayContent().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if(mAdapter!=null){
+                    mAdapter.displayingBody(integer);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     private void getAllFavoriteNotesWithImages(){
@@ -118,4 +152,5 @@ public class FavoriteFragment extends Fragment {
             }
         }).attachToRecyclerView(recyclerView);
     }
+
 }

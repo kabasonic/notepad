@@ -78,6 +78,7 @@ public class HomeFragment extends Fragment {
         getAllNotes();
         getDisplayElement();
         getDisplayContent();
+
     }
 
 
@@ -99,7 +100,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(Integer integer) {
                 Log.d("HomeViewModel", "onChanged");
-                if(mRecyclerView != null && mAdapter != null){
+                if(mRecyclerView != null && mAdapter != null && integer != null){
+
                     mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, integer));
                     mAdapter.displayingView(integer);
                     mAdapter.notifyDataSetChanged();
@@ -162,7 +164,13 @@ public class HomeFragment extends Fragment {
                 NoteWithImages noteWithImages = mAdapter.getNoteWithImagesAt(viewHolder.getAdapterPosition());
                 noteWithImages.note.setDeletedAt(sdf.format(date));
                 homeViewModel.updateNoteWithImages(noteWithImages);
-                Snackbar.make(view,"The note was moved to the trash.",Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view,"The note was moved to the trash.",Snackbar.LENGTH_SHORT).setAction("Trash", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    NavDirections action = HomeFragmentDirections.actionHomeFragmentToTrashFragment();
+                    Navigation.findNavController(view).navigate(action);
+                    }
+                }).show();
 
 //                homeViewModel.deleteNoteWithImages(mAdapter.getNoteAt(viewHolder.getAdapterPosition()));
 //                mAdapter.notifyItemRemoved(viewHolder.getLayoutPosition());

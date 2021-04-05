@@ -37,6 +37,7 @@
                     android:text="@string/lorem_ipsum"
                     android:textColor="@color/black"
                     android:textStyle="bold"
+                    android:hint="Title"
                     android:layout_weight="1"/>
 
                 <ImageView

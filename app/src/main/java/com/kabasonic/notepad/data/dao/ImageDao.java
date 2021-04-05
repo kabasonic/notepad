@@ -32,4 +32,6 @@ public interface ImageDao {
     @Query("SELECT * FROM image_table")
     LiveData<List<Image>> getAllImages();
 
+
+
 }
