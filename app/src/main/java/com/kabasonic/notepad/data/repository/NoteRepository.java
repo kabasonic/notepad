@@ -194,4 +194,25 @@ public class NoteRepository {
         }
     }
 
+    public void deleteTask(Task task){
+       new DeleteTask(noteDao).execute(task);
+    }
+
+    private static class DeleteTask extends AsyncTask<Task,Void,Void>{
+        private NoteDao noteDao;
+
+        private DeleteTask(NoteDao noteDao){
+            this.noteDao = noteDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(Task... tasks) {
+            if(tasks[0].getId() != 0){
+                noteDao.deleteTask(tasks[0]);
+            }
+            return null;
+        }
+    }
+
 }

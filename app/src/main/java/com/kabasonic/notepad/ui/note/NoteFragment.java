@@ -191,9 +191,15 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                     noteViewModel.updateTask(new NoteWithTasks(note, mTaskAdapter.getmItemList()));
                 }
                 //Snackbar.make(view, "Note updated.", Snackbar.LENGTH_SHORT).show();
-            } else if (getTitleView().isEmpty() && getBodyView().isEmpty()) {
+            } else if (getTitleView().isEmpty() && getBodyView().isEmpty() ) {
                 //Delete note
-                Snackbar.make(view, "Empty note deleted.", Snackbar.LENGTH_SHORT).show();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyy hh:mm");
+                Date date = new Date(System.currentTimeMillis());
+                NoteWithImages noteWithImages = new NoteWithImages(getNoteValuesFromView(),mAdapter.getImageList());
+                noteWithImages.note.setId(this.currentNote.getId());
+                noteWithImages.note.setDeletedAt(sdf.format(date));
+                noteViewModel.updateNoteWithImages(noteWithImages);
+                Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_SHORT).show();
             }
         }
 
@@ -263,6 +269,10 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                         for (Task items : mTaskAdapter.getmItemList()) {
                             Log.d("List", "items: " + items.getBody());
                         }
+                        if(mTaskAdapter.getmItemList().isEmpty()){
+                            fieldBody.setText("");
+                            this.currentNote.setBody("");
+                        }
                         mTaskRecyclerView.setVisibility(View.GONE);
                         taskLayout.setVisibility(View.GONE);
                         fieldBody.setVisibility(View.VISIBLE);
@@ -297,14 +307,25 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         addTaskToList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                taskList.add(new Task(fieldTask.getText().toString(), false));
-                mTaskAdapter.setmItemList(taskList);
-                mTaskRecyclerView.scrollToPosition(mTaskRecyclerView.getAdapter().getItemCount() - 1);
-                mTaskAdapter.notifyDataSetChanged();
-                fieldTask.setText("");
+                if(!fieldTask.getText().toString().isEmpty()){
+                    List<Task> tempList = mTaskAdapter.getmItemList();
+                    tempList.add(new Task(fieldTask.getText().toString(), false));
+                    mTaskAdapter.setmItemList(tempList);
+                    mTaskRecyclerView.scrollToPosition(mTaskRecyclerView.getAdapter().getItemCount() - 1);
+                    mTaskAdapter.notifyDataSetChanged();
+                    updateBody();
+                    fieldTask.setText("");
+                }
+
             }
         });
     }
+
+    private void updateBody(){
+        String text = fieldBody.getText().toString() + "\n" + fieldTask.getText().toString();
+        fieldBody.setText(text);
+    }
+
 
     private void buildTaskListAdapter() {
         mTaskRecyclerView.setHasFixedSize(false);
@@ -315,8 +336,13 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         mTaskAdapter.setOnItemClickListener(new TaskAdapter.OnClickListener() {
             @Override
             public void removeTask(int position) {
+                Task task = mTaskAdapter.getmItemList().get(position);
+                noteViewModel.deleteTask(task);
                 mTaskAdapter.removeTaskWithList(position);
                 mTaskAdapter.notifyItemRemoved(position);
+                if(mTaskAdapter.getmItemList().isEmpty()){
+                    fieldBody.setText("");
+                }
             }
 
             @Override

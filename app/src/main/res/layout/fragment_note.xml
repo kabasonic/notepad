@@ -133,7 +133,7 @@
                 android:id="@+id/last_change"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:gravity="end"
                 android:paddingLeft="32dp"
                 android:paddingTop="8dp"
                 android:paddingRight="32dp"

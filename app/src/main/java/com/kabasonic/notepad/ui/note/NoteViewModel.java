@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.kabasonic.notepad.data.db.NoteWithImages;
 import com.kabasonic.notepad.data.db.NoteWithTasks;
 import com.kabasonic.notepad.data.model.Image;
+import com.kabasonic.notepad.data.model.Task;
 import com.kabasonic.notepad.data.repository.NoteRepository;
 
 import java.util.List;
@@ -63,6 +64,10 @@ public class NoteViewModel extends AndroidViewModel {
 
     public void deleteListTasks(NoteWithTasks noteWithTasks){
         noteRepository.deleteListTasks(noteWithTasks);
+    }
+
+    public void deleteTask(Task task){
+        noteRepository.deleteTask(task);
     }
 
 }
