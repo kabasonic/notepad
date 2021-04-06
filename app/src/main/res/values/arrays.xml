@@ -9,18 +9,69 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
-    <string-array name="theme_entries" />
-    <string-array name="theme_values" />
+    <string-array name="theme_entries">
+        <item>Default</item>
+        <item>Red</item>
+        <item>Pink</item>
+        <item>Purple</item>
+        <item>Blue</item>
+        <item>Cyan</item>
+        <item>Green</item>
+        <item>DeepOrange</item>
+        <item>Brown</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>AppTheme</item>
+        <item>ThemeRed</item>
+        <item>ThemePink</item>
+        <item>ThemePurple</item>
+        <item>ThemeBlue</item>
+        <item>ThemeCyan</item>
+        <item>ThemeGreen</item>
+        <item>ThemeDeepOrange</item>
+        <item>ThemeBrown</item>
+    </string-array>
+
     <string-array name="font_entries">
-        <item>Indie Flower</item>
+        <item>Amita</item>
+        <item>Anton</item>
+        <item>Architects daughter</item>
+        <item>Lato</item>
+        <item>Oxygen</item>
+        <item>Poppins</item>
         <item>Roboto</item>
+        <item>Rubik</item>
     </string-array>
     <string-array name="font_values">
-        <item>indie_flower</item>
+        <item>amita</item>
+        <item>anton</item>
+        <item>architects_daughter</item>
+        <item>lato</item>
+        <item>oxygen</item>
+        <item>poppins</item>
         <item>roboto</item>
+        <item>rubik</item>
     </string-array>
-    <string-array name="size_text_entries" />
-    <string-array name="size_text_values" />
+
+    <string-array name="size_text_entries">
+        <item>14</item>
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+        <item>22</item>
+        <item>24</item>
+        <item>26</item>
+    </string-array>
+    <string-array name="size_text_values">
+        <item>14</item>
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+        <item>22</item>
+        <item>24</item>
+        <item>26</item>
+    </string-array>
+
     <string-array name="language_values" />
     <string-array name="language_entries" />
 </resources>

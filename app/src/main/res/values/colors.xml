@@ -31,6 +31,36 @@
     <color name="color_9">#bcaaa4</color>
     <color name="color_10">#FFFFFFFF</color>
 
+    <color name="colorPrimaryRed">#c62828</color>
+    <color name="colorPrimaryDarkRed">#8e0000</color>
+    <color name="colorAccentRed">#ff5f52</color>
 
+    <color name="colorPrimaryPink">#ad1457</color>
+    <color name="colorPrimaryDarkPink">#78002e</color>
+    <color name="colorAccentPink">#e35183</color>
+
+    <color name="colorPrimaryPurple">#6a1b9a</color>
+    <color name="colorPrimaryDarkPurple">#38006b</color>
+    <color name="colorAccentPurple">#9c4dcc</color>
+
+    <color name="colorPrimaryBlue">#1565c0</color>
+    <color name="colorPrimaryDarkBlue">#003c8f</color>
+    <color name="colorAccentBlue">#5e92f3</color>
+
+    <color name="colorPrimaryCyan">#00838f</color>
+    <color name="colorPrimaryDarkCyan">#005662</color>
+    <color name="colorAccentCyan">#4fb3bf</color>
+
+    <color name="colorPrimaryGreen">#2e7d32</color>
+    <color name="colorPrimaryDarkGreen">#005005</color>
+    <color name="colorAccentGreen">#60ad5e</color>
+
+    <color name="colorPrimaryDeepOrange">#d84315</color>
+    <color name="colorPrimaryDarkDeepOrange">#9f0000</color>
+    <color name="colorAccentDeepOrange">#ff7543</color>
+
+    <color name="colorPrimaryBrown">#4e342e</color>
+    <color name="colorPrimaryDarkBrown">#260e04</color>
+    <color name="colorAccentBrown">#7b5e57</color>
 
 </resources>

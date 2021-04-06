@@ -12,7 +12,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-            app:defaultValue="Orange"
+            app:defaultValue="Default"
             app:entries="@array/theme_entries"
             app:entryValues="@array/theme_values"
             app:key="theme"
@@ -25,7 +25,7 @@
         app:icon="@drawable/ic_round_palette_24">
 
         <ListPreference
-            app:defaultValue="Basic"
+            app:defaultValue="Default"
             app:entries="@array/font_entries"
             app:entryValues="@array/font_values"
             app:key="font"

@@ -9,8 +9,120 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="AppTheme.Launcher">
+    <style name="AppTheme.Launcher" >
         <item name="android:windowBackground">@drawable/launch_screen</item>
+    </style>
+
+    <style name="ThemeRed" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryRed</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkRed</item>
+        <item name="colorAccent">@color/colorAccentRed</item>
+    </style>
+
+    <style name="ThemePink" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryPink</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkPink</item>
+        <item name="colorAccent">@color/colorAccentPink</item>
+    </style>
+
+    <style name="ThemePurple" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryPurple</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkPurple</item>
+        <item name="colorAccent">@color/colorAccentPurple</item>
+    </style>
+
+    <style name="ThemeBlue" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
+        <item name="colorAccent">@color/colorAccentBlue</item>
+    </style>
+
+    <style name="ThemeCyan" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryCyan</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkCyan</item>
+        <item name="colorAccent">@color/colorAccentCyan</item>
+    </style>
+
+    <style name="ThemeGreen" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryGreen</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkGreen</item>
+        <item name="colorAccent">@color/colorAccentGreen</item>
+    </style>
+
+    <style name="ThemeDeepOrange" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryDeepOrange</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkDeepOrange</item>
+        <item name="colorAccent">@color/colorAccentDeepOrange</item>
+    </style>
+
+    <style name="ThemeBrown" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryBrown</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBrown</item>
+        <item name="colorAccent">@color/colorAccentBrown</item>
+    </style>
+
+
+
+    <style name="textSize14" parent="AppTheme">
+        <item name="customTextSize">@dimen/textSize14</item>
+    </style>
+
+    <style name="textSize16" parent="AppTheme">
+        <item name="customTextSize">@dimen/textSize16</item>
+    </style>
+
+    <style name="textSize18" parent="AppTheme">
+        <item name="customTextSize">@dimen/textSize18</item>
+    </style>
+
+    <style name="textSize20" parent="AppTheme">
+        <item name="customTextSize">@dimen/textSize20</item>
+    </style>
+
+    <style name="textSize22" parent="AppTheme">
+        <item name="customTextSize">@dimen/textSize22</item>
+    </style>
+
+    <style name="textSize24" parent="AppTheme">
+        <item name="customTextSize">@dimen/textSize24</item>
+    </style>
+
+    <style name="textSize26" parent="AppTheme">
+        <item name="customTextSize">@dimen/textSize26</item>
+    </style>
+
+
+
+    <style name="fontAmita" parent="AppTheme">
+        <item name="customFont">@font/amita</item>
+    </style>
+
+    <style name="fontAnton" parent="AppTheme">
+        <item name="customFont">@font/anton</item>
+    </style>
+
+    <style name="fontArchitectsDaughter" parent="AppTheme">
+        <item name="customFont">@font/architects_daughter</item>
+    </style>
+
+    <style name="fontLato" parent="AppTheme">
+        <item name="customFont">@font/lato</item>
+    </style>
+
+    <style name="fontOxygen" parent="AppTheme">
+        <item name="customFont">@font/oxygen</item>
+    </style>
+
+    <style name="fontPoppins" parent="AppTheme">
+        <item name="customFont">@font/poppins</item>
+    </style>
+
+    <style name="fontRoboto" parent="AppTheme">
+        <item name="customFont">@font/roboto</item>
+    </style>
+
+    <style name="fontRubik" parent="AppTheme">
+        <item name="customFont">@font/rubik</item>
     </style>
 
 </resources>

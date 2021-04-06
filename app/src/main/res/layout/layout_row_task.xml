@@ -31,13 +31,14 @@
                     android:id="@+id/edit_text_row_task"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:text=""
                     android:background="@null"
                     android:hint="New Task"
                     android:overScrollMode="always"
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
+                    android:textSize="?attr/customTextSize"
+                    android:fontFamily="?attr/customFont"
                     />
         </androidx.core.widget.NestedScrollView>
 

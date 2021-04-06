@@ -49,7 +49,9 @@
                 android:paddingRight="32dp"
                 android:paddingBottom="16dp"
                 android:text=""
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="?attr/customTextSize"
+                android:fontFamily="?attr/customFont"/>
 
             <EditText
                 android:id="@+id/edit_body_text_note"
@@ -66,7 +68,9 @@
                 android:paddingBottom="0dp"
                 android:text=""
                 android:visibility="visible"
-                tools:ignore="TextViewEdits" />
+                tools:ignore="TextViewEdits"
+                android:textSize="?attr/customTextSize"
+                android:fontFamily="?attr/customFont"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_task_note"
@@ -107,6 +111,8 @@
                     android:overScrollMode="always"
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
+                    android:textSize="?attr/customTextSize"
+                    android:fontFamily="?attr/customFont"
                     />
             </androidx.core.widget.NestedScrollView>
 
@@ -134,7 +140,9 @@
                 android:paddingBottom="16dp"
                 android:text=""
                 android:textColor="@color/black"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                android:textSize="?attr/customTextSize"
+                android:fontFamily="?attr/customFont"/>
 
 
         </LinearLayout>

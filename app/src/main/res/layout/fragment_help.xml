@@ -9,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/lorem_ipsum"
-        android:textSize="18sp" />
+        android:textSize="?attr/customTextSize"
+        android:fontFamily="?attr/customFont"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

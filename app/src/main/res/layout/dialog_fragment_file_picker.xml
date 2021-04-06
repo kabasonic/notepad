@@ -25,7 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_your_photo_with_camera"
-            android:textSize="18sp"
+            android:textSize="?attr/customTextSize"
+            android:fontFamily="?attr/customFont"
             android:layout_margin="16dp"/>
 
     </LinearLayout>
@@ -50,7 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_your_photo_with_gallery"
-            android:textSize="18sp"
+            android:textSize="?attr/customTextSize"
+            android:fontFamily="?attr/customFont"
             android:layout_margin="16dp"/>
 
     </LinearLayout>

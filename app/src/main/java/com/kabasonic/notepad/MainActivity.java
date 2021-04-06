@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.kabasonic.notepad.ui.help.HelpFragment;
@@ -35,19 +36,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private NavController navController;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String keyTheme = sharedPreferences.getString("theme","AppTheme");
+        String keyFonts = sharedPreferences.getString("font","roboto");
+        String keyTextSize = sharedPreferences.getString("text_size","16");
+        Methods methods = new Methods();
+        methods.getTheme(keyTheme);
+        methods.getFonts(keyFonts);
+        methods.getTextSize(keyTextSize);
+        setTheme(Constant.textSize);
+        setTheme(Constant.font);
+        setTheme(Constant.theme);
+
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Check and start on boarding fragments
         checkOnBoarding();
 
-
         Toolbar mToolbar = (Toolbar) findViewById(R.id.topAppBar);
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-
 
         setSupportActionBar(mToolbar);
         // Passing each menu ID as a set of Ids because each
@@ -74,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

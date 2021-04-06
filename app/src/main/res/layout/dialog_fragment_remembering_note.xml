@@ -25,6 +25,8 @@
         android:text="@string/add_a_remember"
         android:textColor="@color/black"
         android:gravity="center"
+        android:textSize="?attr/customTextSize"
+        android:fontFamily="?attr/customFont"
         android:layout_marginBottom="8dp"/>
 
     <LinearLayout
@@ -41,7 +43,9 @@
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:textSize="?attr/customTextSize"
+            android:fontFamily="?attr/customFont"/>
 
         <TextView
             android:id="@+id/day_reminder"
@@ -53,7 +57,9 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:onClick="onClick"/>
+            android:onClick="onClick"
+            android:textSize="?attr/customTextSize"
+            android:fontFamily="?attr/customFont"/>
 
     </LinearLayout>
 
@@ -72,7 +78,10 @@
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:textSize="?attr/customTextSize"
+            android:fontFamily="?attr/customFont"
+            />
 
         <TextView
             android:id="@+id/time_reminder"
@@ -85,6 +94,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:onClick="onClick"
+            android:textSize="?attr/customTextSize"
+            android:fontFamily="?attr/customFont"
             />
 
     </LinearLayout>
@@ -104,7 +115,9 @@
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:textSize="?attr/customTextSize"
+            android:fontFamily="?attr/customFont"/>
 
 
 
@@ -134,7 +147,9 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/black"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:textSize="?attr/customTextSize"
+            android:fontFamily="?attr/customFont"/>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/set_switch_reminder"

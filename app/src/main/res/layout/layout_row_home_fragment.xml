@@ -70,7 +70,9 @@
                     android:ellipsize="end"
                     android:maxLines="10"
                     android:text="@string/lorem_ipsum_body"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="?attr/customTextSize"
+                    android:fontFamily="?attr/customFont"/>
 
                 <FrameLayout
                     android:id="@+id/layout_image_home_fragment"
@@ -108,8 +110,9 @@
                         android:scaleType="fitStart"
                         android:text="1"
                         android:textColor="#ffffffff"
-                        android:textSize="12sp"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        android:textSize="?attr/customTextSize"
+                        android:fontFamily="?attr/customFont"/>
 
                 </FrameLayout>
 
