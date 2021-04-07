@@ -158,9 +158,6 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter<HomeFragmentAdapte
                 }
             });
 
-
-
-
         }
     }
 

@@ -17,21 +17,10 @@ public interface ImageDao {
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insert(Image image);
 
-//    @Update(onConflict = OnConflictStrategy.REPLACE)
-//    void update(Image image);
-
-//    @Delete
-//    void delete(Image image);
-//
-//    @Query("DELETE FROM image_table")
-//    void deleteAllImages();
-
     @Delete
     void deleteImageWithNote(Image image);
 
     @Query("SELECT * FROM image_table")
     LiveData<List<Image>> getAllImages();
-
-
 
 }

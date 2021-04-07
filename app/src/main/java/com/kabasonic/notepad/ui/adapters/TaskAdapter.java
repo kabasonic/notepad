@@ -87,7 +87,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public String getListToString() {
         String output = "";
         for (Task items : mItemList) {
-            Log.d("Debug", "All task to string: " + output);
             output += items.getBody() + "\n";
         }
         return output;
@@ -116,8 +115,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
                             if (!hasFocus) {
-                                Log.d("Debug", "Focus false, text: " + fieldTask.getText().toString());
-                                Log.d("Debug", "Adapter position:  " + position);
                                 mListener.fieldTask(position, fieldTask.getText().toString());
                                 mListener.fieldTask(position, fieldTask.getText().toString());
                             }

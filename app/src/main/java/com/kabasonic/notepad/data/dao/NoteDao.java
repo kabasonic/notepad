@@ -73,9 +73,6 @@ public interface NoteDao {
     @Query("SELECT * FROM note_table WHERE note_id = :noteId")
     LiveData<NoteWithTasks> getNoteWithTasks(int noteId);
 
-
-
-
     @Query("SELECT MAX(note_id) FROM note_table")
     int getLastId();
 

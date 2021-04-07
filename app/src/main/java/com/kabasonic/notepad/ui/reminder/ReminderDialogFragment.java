@@ -22,6 +22,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.kabasonic.notepad.R;
 import com.kabasonic.notepad.ui.note.NoteFragment;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -39,6 +40,8 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
     Spinner spinnerReminder;
     SwitchMaterial switchReminder;
     MaterialButton btOkayReminder, btCancelReminder;
+
+
 
     private long time;
     private FragmentManager fm;
@@ -146,9 +149,19 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
 
 
 
-//                AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
-//                alarmManagerBroadcastReceiver.setAlarm(context);
-//                getDialog().dismiss();
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm");
+                    String dateInString = dateReminder.getText().toString()+ " " + timeReminder.getText().toString();
+                    Date date = sdf.parse(dateInString);
+                    long millis = date.getTime();
+                    AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
+                    alarmManagerBroadcastReceiver.setOneTimeTimer(context,0);
+                    Log.d(getClass().getSimpleName(),"Date: " + date.getTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                getDialog().dismiss();
+
 
                 break;
             case R.id.bt_cancel_reminder:
@@ -163,11 +176,14 @@ public class ReminderDialogFragment extends DialogFragment implements View.OnCli
     public void time(int hour, int minute) {
 
         timeReminder.setText(hour + ":" + minute);
+        Log.d(getClass().getSimpleName(),"Time: " + timeReminder.getText().toString());
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void date(int year, int month, int day) {
-        dateReminder.setText(day + "." + month + "." + year);
+
+        dateReminder.setText(day + "-" + month + "-" + year);
+        Log.d(getClass().getSimpleName(),"Date: " + dateReminder.getText().toString());
     }
 }

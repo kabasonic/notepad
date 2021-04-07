@@ -66,12 +66,14 @@ public class FilePickerDialogFragment extends DialogFragment implements View.OnC
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.linear_1) {
-            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                Log.d(getClass().getSimpleName(), "Permission granted");
+            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 mListener.imageLoader(0);
+                Log.d(getClass().getSimpleName(), "Permission granted");
             } else {
                 Log.d(getClass().getSimpleName(), "Permission denied");
                 requestCameraPermission();
+                //requestWriteStoragePermission();
             }
         } else if (v.getId() == R.id.linear_2) {
 
@@ -80,24 +82,29 @@ public class FilePickerDialogFragment extends DialogFragment implements View.OnC
                 mListener.imageLoader(1);
             } else {
                 Log.d(getClass().getSimpleName(), "Permission denied");
-                requestStoragePermission();
+                requestReadStoragePermission();
             }
         }
         Objects.requireNonNull(getDialog()).dismiss();
     }
 
+
     private void requestCameraPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this.mActivity,
-                Manifest.permission.CAMERA)) {
+                Manifest.permission.CAMERA) &&
+                ActivityCompat.shouldShowRequestPermissionRationale(this.mActivity,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             ActivityCompat.requestPermissions(mActivity,
-                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_PERMISSION_CODE);
+
         } else {
             ActivityCompat.requestPermissions(this.mActivity,
-                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_PERMISSION_CODE);
         }
     }
 
-    private void requestStoragePermission() {
+
+    private void requestReadStoragePermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this.mActivity,
                 Manifest.permission.READ_EXTERNAL_STORAGE)) {
             ActivityCompat.requestPermissions(mActivity,
@@ -107,7 +114,6 @@ public class FilePickerDialogFragment extends DialogFragment implements View.OnC
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
         }
     }
-
 
 
     @Override

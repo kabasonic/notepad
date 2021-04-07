@@ -2,7 +2,6 @@ package com.kabasonic.notepad.ui.favorite;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,9 +69,7 @@ public class FavoriteFragment extends Fragment {
         homeViewModel.getDisplayElements().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                Log.d("HomeViewModel", "onChanged");
                 if(recyclerView != null && mAdapter != null && integer != null){
-                    Log.d("DISPLAY ELEMNTS","HERE");
                     recyclerView.setLayoutManager(new GridLayoutManager(mContext, integer));
                     mAdapter.displayingView(integer);
                     mAdapter.notifyDataSetChanged();

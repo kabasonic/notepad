@@ -95,7 +95,6 @@ public class TrashFragment extends Fragment {
         homeViewModel.getDisplayElements().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                Log.d("HomeViewModel", "onChanged");
                 if(recyclerView != null && mAdapter != null && integer != null){
 
                     recyclerView.setLayoutManager(new GridLayoutManager(mContext, integer));

@@ -77,7 +77,6 @@ public class ColorPickerDialogFragment extends DialogFragment implements DialogI
     @Override
     public void onClick(DialogInterface dialog, int which) {
         if (which == Dialog.BUTTON_NEGATIVE) {
-            Log.d("Color View: ", "BUTTON_NEGATIVE");
             dialog.dismiss();
         }
     }

@@ -42,7 +42,6 @@ public class ScreenSlidePagerActivity extends FragmentActivity implements Screen
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(getResources().getString(R.string.saved_on_boarding_status_key), 1);
         editor.apply();
-        Log.i(getClass().getSimpleName(), " On boarding is shown.");
 
         finish();
     }

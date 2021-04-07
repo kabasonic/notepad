@@ -1,10 +1,14 @@
 <resources>
-    <string name="app_name">Notepad</string>
+    <string name="app_name">Fire Note</string>
 
     <string name="lorem_ipsum">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</string>
     <string name="lorem_ipsum_body">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
 
 The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</string>
+
+    <string name="illustration_1">Fire Note notebook in which you want to paste photos, tickets, maps and everything related to travel. Write down here the people to whom you are grateful, record your gratitude to the world.</string>
+    <string name="illustration_2">Fire Note for a novel do you know how Gogol wrote his works? Manually, rewriting several times. I read about this method in a book by Catherine Oaro. Maybe your book will also start with a notebook or notebook?</string>
+    <string name="illustration_3">Fire Note personal diary a description of thoughts, events of the day, plans, dreams, feelings, states and discoveries.</string>
 
     <!--    Shared preferences keys     -->
     <string name="shared_preferences_notepad">SHARED_PREFERENCES_NOTEPAD</string>
@@ -74,6 +78,14 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
     <string name="choose_email_client">Choose email client</string>
+    <string name="_00_00">00:00</string>
+    <string name="info_help">If you have any questions, suggestions, or would like to leave a comment regarding this application, please contact us using the electronic button by clicking on the button Contact Us. Thank You, we appreciate every user! </string>
+    <string name="send">Contact us</string>
+    <string name="title">Title</string>
+    <string name="your_text">Your text</string>
+    <string name="new_task">New Task</string>
+    <string name="get_started">Get Started</string>
+    <string name="write_down_your_thoughts_in_a_fire_notepad">Write down your thoughts in a Fire Notepad.</string>
 </resources>

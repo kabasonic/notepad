@@ -5,11 +5,12 @@
         android:enabled="true"
         android:icon="@drawable/ic_round_palette_24"
         android:title="@string/palette" />
-    <item
-        android:id="@+id/nav_menu_2"
-        android:enabled="true"
-        android:icon="@drawable/ic_round_notifications_24"
-        android:title="@string/notification" />
+<!--    In development-->
+<!--    <item-->
+<!--        android:id="@+id/nav_menu_2"-->
+<!--        android:enabled="true"-->
+<!--        android:icon="@drawable/ic_round_notifications_24"-->
+<!--        android:title="@string/notification" />-->
     <item
         android:id="@+id/nav_menu_3"
         android:enabled="true"

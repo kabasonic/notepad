@@ -1,10 +1,7 @@
 package com.kabasonic.notepad.ui.onboarding;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,15 +63,15 @@ public class ScreenSlidePageFragment extends Fragment {
         switch (this.position) {
             case 0:
                 imView.setImageResource(R.drawable.illustration_1);
-                txView.setText(R.string.lorem_ipsum);
+                txView.setText(R.string.illustration_1);
                 break;
             case 1:
                 imView.setImageResource(R.drawable.illustration_2);
-                txView.setText(R.string.lorem_ipsum);
+                txView.setText(R.string.illustration_2);
                 break;
             case 2:
                 imView.setImageResource(R.drawable.illustration_3);
-                txView.setText(R.string.lorem_ipsum);
+                txView.setText(R.string.illustration_3);
                 break;
             default:
                 break;

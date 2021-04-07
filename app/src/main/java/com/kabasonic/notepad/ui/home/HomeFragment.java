@@ -197,19 +197,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        mFabCreateReminder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavDirections action = HomeFragmentDirections.actionHomeFragmentToNoteFragment(getResources().getString(R.string.note_key_remembering), -1);
-                Navigation.findNavController(view).navigate(action);
-            }
-        });
+//        mFabCreateReminder.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                NavDirections action = HomeFragmentDirections.actionHomeFragmentToNoteFragment(getResources().getString(R.string.note_key_remembering), -1);
+//                Navigation.findNavController(view).navigate(action);
+//            }
+//        });
     }
 
     private void initViewElements(View view) {
         mFabMore = view.findViewById(R.id.fab_more);
         mFabCreateNote = view.findViewById(R.id.fab_two);
-        mFabCreateReminder = view.findViewById(R.id.fab_one);
+//        mFabCreateReminder = view.findViewById(R.id.fab_one);
     }
 
     private void initAnimElements() {
@@ -230,11 +230,11 @@ public class HomeFragment extends Fragment {
         if (!this.clicked) {
             mFabMore.setAnimation(rotateOpenAnim);
             mFabCreateNote.setAnimation(fromBottomAnim);
-            mFabCreateReminder.setAnimation(fromBottomAnim);
+//            mFabCreateReminder.setAnimation(fromBottomAnim);
         } else {
             mFabMore.setAnimation(rotateCloseAnim);
             mFabCreateNote.setAnimation(toBottomAnim);
-            mFabCreateReminder.setAnimation(toBottomAnim);
+//            mFabCreateReminder.setAnimation(toBottomAnim);
         }
 
     }
@@ -243,11 +243,11 @@ public class HomeFragment extends Fragment {
         if (!this.clicked) {
             mFabMore.setVisibility(View.VISIBLE);
             mFabCreateNote.setVisibility(View.VISIBLE);
-            mFabCreateReminder.setVisibility(View.VISIBLE);
+//            mFabCreateReminder.setVisibility(View.VISIBLE);
         } else {
             mFabMore.setVisibility(View.VISIBLE);
             mFabCreateNote.setVisibility(View.INVISIBLE);
-            mFabCreateReminder.setVisibility(View.INVISIBLE);
+//            mFabCreateReminder.setVisibility(View.INVISIBLE);
         }
 
 
@@ -256,10 +256,10 @@ public class HomeFragment extends Fragment {
     private void setClicked() {
         if (!this.clicked) {
             mFabCreateNote.setClickable(true);
-            mFabCreateReminder.setClickable(true);
+//            mFabCreateReminder.setClickable(true);
         } else {
             mFabCreateNote.setClickable(false);
-            mFabCreateReminder.setClickable(false);
+//            mFabCreateReminder.setClickable(false);
         }
     }
 

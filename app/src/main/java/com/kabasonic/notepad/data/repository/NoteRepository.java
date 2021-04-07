@@ -2,7 +2,6 @@ package com.kabasonic.notepad.data.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -20,8 +19,6 @@ public class NoteRepository {
 
     private NoteDao noteDao;
     private ImageDao imageDao;
-
-    private long id;
 
     public NoteRepository(Application application) {
         NoteDatabase database = NoteDatabase.getInstance(application);
@@ -92,7 +89,6 @@ public class NoteRepository {
 
             long identifier = noteDao.insertNote(noteWithImages[0].note);
 
-            Log.d("NoteRepository","note identifier id: " + identifier);
             for (Image image: noteWithImages[0].imageList) {
                 image.setIdFkNote(identifier);
             }
@@ -129,7 +125,6 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(NoteWithTasks... noteWithTasks) {
 
-            Log.d("NoteRepository","note id: " + noteDao.getLastId());
             for (Task task: noteWithTasks[0].taskList) {
                 if(task.getId() == 0 && task.getIdFkNoteTask() == 0){
                     task.setIdFkNoteTask(noteDao.getLastId());
@@ -164,7 +159,6 @@ public class NoteRepository {
                     task.setIdFkNoteTask(noteWithTasks[0].note.getId());
                     noteDao.insertTaskToNote(task);
                 }else{
-                    Log.d("TaskUpdate","task id: " + task.getId());
                     noteDao.updateTask(task);
                 }
             }

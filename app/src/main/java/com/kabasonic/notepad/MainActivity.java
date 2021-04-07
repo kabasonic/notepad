@@ -1,6 +1,5 @@
 package com.kabasonic.notepad;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +12,6 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,12 +29,10 @@ import com.kabasonic.notepad.ui.onboarding.ScreenSlidePagerActivity;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    AppBarConfiguration mAppBarConfiguration;
+    private AppBarConfiguration mAppBarConfiguration;
     private HomeViewModel homeViewModel;
     private DrawerLayout drawer;
     private NavController navController;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +47,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setTheme(Constant.textSize);
         setTheme(Constant.font);
         setTheme(Constant.theme);
-
-
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -83,21 +76,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupWithNavController(navigationView, navController);
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
-        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-
         navigationView.setNavigationItemSelectedListener(this);
 
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_preferences_notepad), MODE_PRIVATE);
         int modeDisplayView = (sharedPref.getInt(getResources().getString(R.string.saved_displaying_elements), 1));
         int modeDisplayText = (sharedPref.getInt(getResources().getString(R.string.saved_displaying_text_note), 1));
@@ -189,6 +175,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
         }
-
     }
 }

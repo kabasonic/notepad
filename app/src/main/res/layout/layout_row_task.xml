@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:text=""
                     android:background="@null"
-                    android:hint="New Task"
+                    android:hint="@string/new_task"
                     android:overScrollMode="always"
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
