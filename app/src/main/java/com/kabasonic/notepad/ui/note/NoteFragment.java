@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -84,7 +85,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     private NoteFragmentArgs getFragmentArguments;
     private NoteViewModel noteViewModel;
     private Note currentNote;
-
+    private boolean deleteNote = false;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -131,21 +132,22 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.share_note:
+                share();
                 break;
             case R.id.delete_note:
                 // Delete note
-                if (!getTitleView().isEmpty() || !getBodyView().isEmpty()) {
-                    //Update Note
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyy hh:mm");
-                    Date date = new Date(System.currentTimeMillis());
-                    Note note = getNoteValuesFromView();
-                    note.setId(getFragmentArguments.getNoteId());
-                    note.setDeletedAt(sdf.format(date));
-                    noteViewModel.updateNoteWithImages(new NoteWithImages(note, mAdapter.getImageList()));
-                    Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_LONG).show();
-                }
+                this.deleteNote = true;
+                Log.d(getClass().getSimpleName(),"deleteNote"+ deleteNote);
+//                SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyy hh:mm");
+//                Date date = new Date(System.currentTimeMillis());
+//                NoteWithImages noteWithImages = new NoteWithImages(getNoteValuesFromView(),mAdapter.getImageList());
+//                noteWithImages.note.setId(this.currentNote.getId());
+//                noteWithImages.note.setDeletedAt(sdf.format(date));
+//                noteViewModel.updateNoteWithImages(noteWithImages);
+//                Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_SHORT).show();
                 NavDirections action = NoteFragmentDirections.actionNoteFragmentToHomeFragment();
                 Navigation.findNavController(view).navigate(action);
+
                 break;
             default:
                 break;
@@ -153,17 +155,28 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
         return super.onOptionsItemSelected(item);
     }
 
+    private void share() {
+        Intent myIntent = new Intent(Intent.ACTION_SEND);
+        myIntent.setType("text/plain");
+        String shareBody = getResources().getString(R.string.app_name) + "\nTitle: " + fieldTitle.getText().toString() + "\nText: " + fieldBody.getText().toString();
+        myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
+        myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(myIntent, "Share"));
+    }
+
     @Override
     public void onDestroyView() {
-        if (getFragmentArguments.getNoteId() == -1 && (!getTitleView().isEmpty() || !getBodyView().isEmpty())) {
+        if(this.deleteNote){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyy hh:mm");
+            Date date = new Date(System.currentTimeMillis());
+            NoteWithImages noteWithImages = new NoteWithImages(getNoteValuesFromView(),mAdapter.getImageList());
+            noteWithImages.note.setId(this.currentNote.getId());
+            noteWithImages.note.setDeletedAt(sdf.format(date));
+            noteViewModel.updateNoteWithImages(noteWithImages);
+            Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_SHORT).show();
+        }else if (getFragmentArguments.getNoteId() == -1 && (!getTitleView().isEmpty() || !getBodyView().isEmpty())) {
             //Insert Note
             noteViewModel.insertNoteWithImages(new NoteWithImages(getNoteValuesFromView(), mAdapter.getImageList()) );
-
-//            for(Task task: mTaskAdapter.getmItemList()){
-//                Log.d("Write Task","completed: " + task.isCompletedTask());
-//                Log.d("Write Task","body: " + task.getBody());
-//
-//            }
 
             if(this.currentNote.isList()){
                 noteViewModel.insertNoteWithTask(new NoteWithTasks(getNoteValuesFromView(),mTaskAdapter.getmItemList()));
@@ -191,7 +204,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                     noteViewModel.updateTask(new NoteWithTasks(note, mTaskAdapter.getmItemList()));
                 }
                 //Snackbar.make(view, "Note updated.", Snackbar.LENGTH_SHORT).show();
-            } else if (getTitleView().isEmpty() && getBodyView().isEmpty() ) {
+            } else if (getTitleView().isEmpty() && getBodyView().isEmpty()) {
                 //Delete note
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyy hh:mm");
                 Date date = new Date(System.currentTimeMillis());
@@ -295,8 +308,13 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
 
                     break;
                 case R.id.nav_menu_5:
-                    Snackbar.make(view, "Note has been added to favorite.", Snackbar.LENGTH_LONG).show();
-                    this.currentNote.setFavorite(true);
+                    if(this.currentNote.isFavorite()){
+                        this.currentNote.setFavorite(false);
+                        Snackbar.make(view, "Note has been deleted from favorite.", Snackbar.LENGTH_SHORT).show();
+                    }else{
+                        this.currentNote.setFavorite(true);
+                        Snackbar.make(view, "Note has been added to favorite.", Snackbar.LENGTH_SHORT).show();
+                    }
                     break;
             }
             return true;
@@ -425,6 +443,12 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
             @Override
             public void onItemClickPickImage(int position) {
                 // Open image in new window
+                LayoutInflater layoutInflater = getLayoutInflater();
+                View view = layoutInflater.inflate(R.layout.layout_dialog_image,null);
+                ImageView imageDialog = view.findViewById(R.id.dialog_image);
+                Uri uriImage = Uri.parse(mAdapter.getAtImageItem(position).getUri());
+                imageDialog.setImageURI(uriImage);
+                new AlertDialog.Builder(mContext).setView(view).create().show();
             }
         });
     }
@@ -461,6 +485,8 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
                 mAdapter.notifyDataSetChanged();
                 setVisibilityImages();
                 setValuesToView();
+
+                bottomNavigationView.setBackgroundColor(noteWithImages.note.getBackgroundColor());
 
                 if (this.currentNote.isList()) {
                     noteViewModel.getNoteWithTasks(getFragmentArguments.getNoteId()).observe(getViewLifecycleOwner(), new Observer<NoteWithTasks>() {

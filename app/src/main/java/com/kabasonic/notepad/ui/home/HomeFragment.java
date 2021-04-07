@@ -41,6 +41,7 @@ public class HomeFragment extends Fragment {
     private boolean clicked = false;
     private Animation fromBottomAnim, rotateCloseAnim, rotateOpenAnim, toBottomAnim;
 
+
     private HomeFragmentAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
