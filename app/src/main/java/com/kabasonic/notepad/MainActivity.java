@@ -23,6 +23,9 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.navigation.NavigationView;
+import com.kabasonic.notepad.data.utility.Constant;
+import com.kabasonic.notepad.data.utility.Methods;
+import com.kabasonic.notepad.data.utility.SettingsActivity;
 import com.kabasonic.notepad.ui.help.HelpFragment;
 import com.kabasonic.notepad.ui.home.HomeViewModel;
 import com.kabasonic.notepad.ui.onboarding.ScreenSlidePagerActivity;
@@ -166,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 bottomSheet.show(getSupportFragmentManager(), "helpBottomSheet");
                 return true;
             case R.id.settingsActivity:
-                startActivity(new Intent(this,SettingsActivity.class));
+                startActivity(new Intent(this, SettingsActivity.class));
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 return true;
             default:

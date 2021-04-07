@@ -165,7 +165,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
             noteWithImages.note.setDeletedAt(sdf.format(date));
             noteViewModel.updateNoteWithImages(noteWithImages);
             Snackbar.make(view, "The note was moved to the trash.", Snackbar.LENGTH_SHORT).show();
-        } else if (getFragmentArguments.getNoteId() == -1 && (!getTitleView().isEmpty() || !getBodyView().isEmpty()) || mAdapter.getItemCount() != 0) {
+        } else if (getFragmentArguments.getNoteId() == -1 && (!getTitleView().isEmpty() || !getBodyView().isEmpty() || mAdapter.getItemCount() != 0)) {
             //Insert Note
             noteViewModel.insertNoteWithImages(new NoteWithImages(getNoteValuesFromView(), mAdapter.getImageList()));
 
@@ -175,7 +175,7 @@ public class NoteFragment extends Fragment implements ColorPickerDialogFragment.
 
             Snackbar.make(view, "Note saved.", Snackbar.LENGTH_SHORT).show();
         } else if (getFragmentArguments.getNoteId() >= 0) {
-            if (!getTitleView().isEmpty() || !getBodyView().isEmpty()) {
+            if (!getTitleView().isEmpty() || !getBodyView().isEmpty() || mAdapter.getItemCount() != 0) {
                 //Update Note
 
                 Note note = getNoteValuesFromView();

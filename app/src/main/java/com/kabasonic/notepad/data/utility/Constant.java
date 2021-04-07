@@ -1,4 +1,6 @@
-package com.kabasonic.notepad;
+package com.kabasonic.notepad.data.utility;
+
+import com.kabasonic.notepad.R;
 
 import java.io.Serializable;
 

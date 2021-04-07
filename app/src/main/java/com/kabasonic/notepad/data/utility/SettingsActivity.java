@@ -1,4 +1,4 @@
-package com.kabasonic.notepad;
+package com.kabasonic.notepad.data.utility;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import com.kabasonic.notepad.MainActivity;
+import com.kabasonic.notepad.R;
 
 
 public class SettingsActivity extends AppCompatActivity {

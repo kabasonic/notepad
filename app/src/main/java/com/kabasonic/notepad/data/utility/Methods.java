@@ -1,4 +1,6 @@
-package com.kabasonic.notepad;
+package com.kabasonic.notepad.data.utility;
+
+import com.kabasonic.notepad.R;
 
 public class Methods {
     public void getTheme(String key){
