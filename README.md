@@ -14,10 +14,13 @@ Fire Notepad is a great assistant in study and business, also being perfect for 
     <img  width="400" src="https://github.com/kabasonic/notepad/blob/main/screenshots/2.png">
 </p>
 
+<p align="center">
+  <img width="400" src="https://github.com/kabasonic/notepad/blob/main/screenshots/3.png">
+    <img  width="400" src="https://github.com/kabasonic/notepad/blob/main/screenshots/4.png">
+</p>
 
-![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/1.png?raw=true)  
-![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/2.png?raw=true)
-![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/3.png?raw=true)
-![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/4.png?raw=true)
-![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/5.png?raw=true)
-![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/6.png?raw=true)
+<p align="center">
+  <img width="400" src="https://github.com/kabasonic/notepad/blob/main/screenshots/5.png">
+    <img  width="400" src="https://github.com/kabasonic/notepad/blob/main/screenshots/6.png">
+</p>
+
