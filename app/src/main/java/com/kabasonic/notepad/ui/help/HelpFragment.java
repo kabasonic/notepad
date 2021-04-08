@@ -60,7 +60,7 @@ public class HelpFragment extends BottomSheetDialogFragment {
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"foxymaan@gmail.com"});
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"fire.notepad.help@gmail.com"});
         intent.putExtra(Intent.EXTRA_SUBJECT, "Query from Notepad application");
         intent.putExtra(Intent.EXTRA_TEXT, body);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
