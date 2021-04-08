@@ -10,7 +10,7 @@ Fire Notepad is a great assistant in study and business, also being perfect for 
 * quickly convert text to a list and vice versa
 
 <p align="center">
-  <img  src="https://github.com/kabasonic/notepad/blob/main/screenshots/1.png">
+  <img width="800" height="600" src="https://github.com/kabasonic/notepad/blob/main/screenshots/1.png">
     <img  src="https://github.com/kabasonic/notepad/blob/main/screenshots/2.png">
 </p>
 
