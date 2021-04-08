@@ -8,9 +8,8 @@ Fire Notepad is a great assistant in study and business, also being perfect for 
 * add images from the gallery
 * add images from the camera
 * quickly convert text to a list and vice versa
-:-------------------------:|:-------------------------:
-![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/1.png?raw=true)  | ![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/2.png?raw=true)
-
+![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/1.png?raw=true)  
+![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/2.png?raw=true)
 ![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/3.png?raw=true)
 ![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/4.png?raw=true)
 ![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/5.png?raw=true)
