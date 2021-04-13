@@ -1,5 +1,7 @@
 # Fire Notepad
 ![alt text](https://github.com/kabasonic/notepad/blob/main/screenshots/template.png?raw=true)
+# Google Play
+https://play.google.com/store/apps/details?id=com.kabasonic.notepad
 Fire Notepad is a great assistant in study and business, also being perfect for writing down your ideas and sharing them! Let Fire Notepad store your notes, documents, memos and everything else, while your mind is free to create new projects and set new goals. Take notes anywhere, draw and make sketches anytime, save and share your records and plans!
 * create notes
 * create lists
